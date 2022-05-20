@@ -6,47 +6,75 @@ import '../../constants/methods/methods.dart';
 // import '../../widgets/random_letters_widget.dart';
 import '../../widgets/widgets.dart';
 
-class MainPageBody extends StatelessWidget {
+class MainPageBody extends StatefulWidget {
   const MainPageBody({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double mh = constraints.maxHeight;
-        double mw = constraints.maxWidth;
+  State<MainPageBody> createState() => _MainPageBodyState();
+}
 
-        Map<String, List<dynamic>> saveIndexArray = {};
+class _MainPageBodyState extends State<MainPageBody> {
+  late Map<LetterClass, List<dynamic>> saveIndexArray;
+  late List<LetterClass> randomLetterList;
+  late List<LetterClass> emptyStringList;
 
-        List<String> randomLetterList =
-            Constants.keyWords[0].toUpperCase().split('');
+  @override
+  void initState() {
+    //Preparation data
+    List<String> tempRandomLetterList =
+        Constants.keyWords[0].toUpperCase().split('');
 
-        randomLetterList.addAll(Constants.alphabetList.where((elem) =>
-            !randomLetterList.contains(elem) && randomLetterList.length < 12));
-        randomLetterList.shuffle();
+    tempRandomLetterList.addAll(Constants.alphabetList.where((elem) =>
+        !tempRandomLetterList.contains(elem) &&
+        tempRandomLetterList.length < 12));
+    tempRandomLetterList.shuffle();
 
-
-        List<String> emptyStringList =
+    List<String> tempEmptyStringList =
         List<String>.filled(Constants.keyWords[0].length, '');
 
-        ReplaceInherited.of(context).randomLetterList = randomLetterList;
-        ReplaceInherited.of(context).emptyStringList = emptyStringList;
-        ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
-        ReplaceInherited.of(context).keyWord = Constants.keyWords[0];
-        
-        final model = ReplaceModel();
+    //Preparation LetterClass List
+    saveIndexArray = {};
 
-        return Container(
-          height: mh,
-          width: mw,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [ConstColor.blackBoard0C, ConstColor.greyBoard31],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
-          ),
-          child: ReplaceInherited(
-            model: model,
+    randomLetterList = tempRandomLetterList
+        .map((e) => LetterClass(
+              letter: e,
+              id: UniqueKey().toString(),
+            ))
+        .toList();
+
+    emptyStringList = tempEmptyStringList
+        .map((e) => LetterClass(
+              letter: e,
+              id: UniqueKey().toString(),
+            ))
+        .toList();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ReplaceInherited(
+      model: ReplaceModel(),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double mh = constraints.maxHeight;
+          double mw = constraints.maxWidth;
+
+          ReplaceInherited.of(context).randomLetterList = randomLetterList;
+          ReplaceInherited.of(context).emptyStringList = emptyStringList;
+          ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
+          ReplaceInherited.of(context).keyWord = Constants.keyWords[0];
+
+          return Container(
+            height: mh,
+            width: mw,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [ConstColor.blackBoard0C, ConstColor.greyBoard31],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -60,38 +88,44 @@ class MainPageBody extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: emptyStringList
+                        children: ReplaceInherited.of(context)
+                            ._emptyStringList!
                             .map((e) => CustomWidget(
                                   mw: mw,
                                   mh: mh,
-                                  letter: e,
+                                  letterElem: e,
                                 ))
                             .toList(),
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: giveW(size: 75, mw: mw)),
-                  child: Wrap(
-                      runSpacing: giveW(size: 12, mw: mw),
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: giveW(size: 8, mw: mw),
-                      children: randomLetterList
-                          .map((e) => CustomWidget(
-                                mw: mw,
-                                mh: mh,
-                                letter: e,
-                              ))
-                          .toList()),
+
+                Container(
+                  height: giveH(size: 79, mh: mh),
+                  margin: EdgeInsets.only(bottom: giveH(size: 30, mh: mh), top: giveH(size: 30, mh: mh)),
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount:
+                        ReplaceInherited.of(context)._randomLetterList!.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 6),
+                    itemBuilder: (context, index) {
+                      return CustomWidget(
+                        mw: mw,
+                        mh: mh,
+                        letterElem: ReplaceInherited.of(context)
+                            ._randomLetterList![index],
+                      );
+                    },
+                  ),
                 )
+
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -101,19 +135,24 @@ class CustomWidget extends StatelessWidget {
     Key? key,
     required this.mw,
     required this.mh,
-    required this.letter,
+    required this.letterElem,
   }) : super(key: key);
 
   final double mw;
   final double mh;
-  final String letter;
+  final LetterClass letterElem;
 
   @override
   Widget build(BuildContext context) {
-    return letter.isNotEmpty
-        ? SizedBox(
+    var tempLetter = letterElem.letter;
+    return tempLetter != ''
+        ? Container(
             height: giveW(size: 50, mw: mw),
             width: giveW(size: 50, mw: mw),
+            margin: EdgeInsets.symmetric(
+              horizontal: giveW(size: 4, mw: mw),
+              vertical: giveH(size: 2, mh: mh),
+            ),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -121,10 +160,12 @@ class CustomWidget extends StatelessWidget {
                 primary: Colors.amber,
                 elevation: 5,
               ),
-              onPressed: () {},
+              onPressed: () {
+                ReplaceInherited.of(context).replaceItems(letterElem);
+              },
               child: flexTextWidget(
                 fontSize: giveH(size: 16, mh: mh),
-                text: letter,
+                text: tempLetter,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -133,7 +174,7 @@ class CustomWidget extends StatelessWidget {
             width: giveW(size: 50, mw: mw),
             height: giveW(size: 50, mw: mw),
             margin: EdgeInsets.symmetric(
-                vertical: giveH(size: 12, mh: mh),
+                vertical: giveH(size: 2, mh: mh),
                 horizontal: giveW(size: 4, mw: mw)),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.25),
@@ -143,45 +184,74 @@ class CustomWidget extends StatelessWidget {
   }
 }
 
-class ReplaceModel extends ChangeNotifier{
-  String? keyWord;
-  List<String>? randomLetterList;
-  List<String>? emptyStringList;
-  Map<String, List<dynamic>>? saveIndexArray;
+class ReplaceModel extends ChangeNotifier {
+  String? _keyWord;
+  List<LetterClass>? _randomLetterList;
+  List<LetterClass>? _emptyStringList;
+  Map<LetterClass, List<dynamic>>? _saveIndexArray;
 
-  void replaceItems(String letter) {
-    bool isNoNull = [keyWord, randomLetterList, emptyStringList, saveIndexArray]
-        .every((element) => element != null);
+  set keyWord(value) => _keyWord = value;
+
+  set randomLetterList(value) => _randomLetterList = value;
+
+  set emptyStringList(value) => _emptyStringList = value;
+
+  set saveIndexArray(value) => _saveIndexArray = value;
+
+  void replaceItems(LetterClass letterObject) {
+    bool isNoNull = [
+      _keyWord,
+      _randomLetterList,
+      _emptyStringList,
+      _saveIndexArray
+    ].every((element) => element != null);
     if (isNoNull) {
-      if (emptyStringList!.every((element) => element.isNotEmpty)) {
-      }
+      //String _totalAnswer = _saveIndexArray!.keys.join();
 
-      else {
-        if (saveIndexArray!.containsKey(letter)) {
-          int randomLetterIndex = saveIndexArray![letter]![0];
-          int emptyStringIndex = saveIndexArray![letter]![1];
+      if (_emptyStringList!.every((element) => element.letter.isNotEmpty)) {
+      } else {
+        if (containsKeyExtend(
+          letterClassObject: letterObject,
+          letterMap: _saveIndexArray!,
+        )) {
+          List tempPositionList = valueExtend(
+            letterMap: _saveIndexArray!,
+            letterObject: letterObject,
+          );
 
-          String tempVar = emptyStringList![randomLetterIndex];
-          emptyStringList![randomLetterIndex] = randomLetterList![emptyStringIndex];
-          randomLetterList![emptyStringIndex] = tempVar;
+          int randomLetterIndex = tempPositionList[0];
+          int emptyStringIndex = tempPositionList[1];
 
-          saveIndexArray!.remove(letter);
+          LetterClass tempVar = _emptyStringList![randomLetterIndex];
+          _emptyStringList![randomLetterIndex] =
+              _randomLetterList![emptyStringIndex];
+          _randomLetterList![emptyStringIndex] = tempVar;
+
+          _saveIndexArray!.removeWhere(((key, value) {
+            bool isExist =
+                key.letter == letterObject.letter && key.id == letterObject.id;
+            return isExist;
+          }));
           notifyListeners();
-
         } else {
+          int emptyStringIndex =
+              _emptyStringList!.indexWhere((element) => element.letter.isEmpty);
+          int randomLetterIndex = _randomLetterList!.indexWhere(
+            (element) =>
+                element.letter == letterObject.letter &&
+                element.id == letterObject.id,
+          );
 
-          int emptyStringIndex = emptyStringList!.indexOf(
-              emptyStringList!.firstWhere((element) => element.isEmpty));
-          int randomLetterIndex = randomLetterList!.indexOf(letter);
+          LetterClass tempVar = _emptyStringList![emptyStringIndex];
+          _emptyStringList![emptyStringIndex] =
+              _randomLetterList![randomLetterIndex];
+          _randomLetterList![randomLetterIndex] = tempVar;
 
-          String tempVar =  emptyStringList![emptyStringIndex];
-          emptyStringList![emptyStringIndex] = randomLetterList![randomLetterIndex];
-          randomLetterList![randomLetterIndex] = tempVar;
-
-          Map <String, List<int>> tempMap = {letter:[emptyStringIndex, randomLetterIndex]};
-          saveIndexArray!.addEntries(tempMap.entries);
+          Map<LetterClass, List<int>> tempMap = {
+            letterObject: [emptyStringIndex, randomLetterIndex]
+          };
+          _saveIndexArray!.addEntries(tempMap.entries);
           notifyListeners();
-
         }
       }
     }
@@ -190,6 +260,7 @@ class ReplaceModel extends ChangeNotifier{
 
 class ReplaceInherited extends InheritedNotifier<ReplaceModel> {
   final ReplaceModel model;
+
   const ReplaceInherited({
     Key? key,
     required this.model,
@@ -197,9 +268,17 @@ class ReplaceInherited extends InheritedNotifier<ReplaceModel> {
   }) : super(key: key, child: child, notifier: model);
 
   static ReplaceModel of(BuildContext context) {
-    final result = context.dependOnInheritedWidgetOfExactType<ReplaceInherited>()!.model;
+    final result =
+        context.dependOnInheritedWidgetOfExactType<ReplaceInherited>()!.model;
     return result;
   }
+}
+
+class LetterClass {
+  final String letter;
+  final String id;
+
+  const LetterClass({required this.letter, required this.id});
 }
 
 // class CheckAndReplace {
