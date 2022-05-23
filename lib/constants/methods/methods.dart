@@ -1,4 +1,5 @@
-import 'package:dissertation_work/pages/main_page_body/main_page_body_view.dart';
+
+import '../../widgets/models/letter_model.dart';
 
 double giveH({
   required double size,
