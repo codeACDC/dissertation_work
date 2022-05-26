@@ -12,7 +12,11 @@ class ImageLoaderInitial extends ImageLoaderState {
 }
 
 class ImageLoaderLoading extends ImageLoaderState {
-  const ImageLoaderLoading();
+  final String searchText;
+  const ImageLoaderLoading(this.searchText);
+
+  @override
+  List<Object> get props => [searchText];
 }
 
 class ImageLoaderLoaded extends ImageLoaderState {

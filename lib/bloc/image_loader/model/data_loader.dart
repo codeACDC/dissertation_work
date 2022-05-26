@@ -14,6 +14,7 @@ class DataLoader {
     }
     else {
       debugPrint('Error bad load!');
+      return {};
     }
   }
 }
