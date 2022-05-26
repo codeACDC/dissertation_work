@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dissertation_work/bloc/image_loader/image_loader_cubit.dart';
+import 'package:dissertation_work/pages/main_page_body/grid_of_image.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -84,6 +85,7 @@ class _MainPageBodyState extends State<MainPageBody> {
             child: Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: giveW(size: 10, mw: mw)),
+              //Image load bloc
               child: BlocProvider<ImageLoaderCubit>(
                 create: (context) =>
                     ImageLoaderCubit(searchText: Constants.keyWords[0])
@@ -108,44 +110,10 @@ class _MainPageBodyState extends State<MainPageBody> {
                                 );
                               }
                               if (state is ImageLoaderLoaded) {
-                                return GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: state.loadedImages.length,
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 1.15,
-                                      mainAxisSpacing: giveW(size: 10, mw: mw),
-                                      crossAxisSpacing: giveW(size: 10, mw: mw),
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return CachedNetworkImage(
-                                          imageBuilder: (context, provider) =>
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: provider),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            giveH(
-                                                                size: 10,
-                                                                mh: mh))),
-                                              ),
-                                          filterQuality: FilterQuality.low,
-                                          fit: BoxFit.cover,
-                                          imageUrl: state.loadedImages[index],
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                          progressIndicatorBuilder:
-                                              (context, url, downloadProgress) {
-                                            return CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              color: Colors.deepPurple[800],
-                                            );
-                                          });
-                                    });
+                                return GridOfImage(
+                                    mh: mh,
+                                    mw: mw,
+                                    urlsOfImage: state.loadedImages);
                               }
                               if (state is ImageLoaderError) {
                                 Future.delayed(Duration.zero, () async {
@@ -162,6 +130,8 @@ class _MainPageBodyState extends State<MainPageBody> {
                             }),
                       ),
                     ),
+
+                    //Empty widget list
                     Container(
                       width: mw,
                       margin: EdgeInsets.symmetric(
@@ -181,6 +151,8 @@ class _MainPageBodyState extends State<MainPageBody> {
                         ),
                       ),
                     ),
+
+                    //Letter widget list
                     Container(
                       height: giveH(size: 79, mh: mh),
                       margin: EdgeInsets.symmetric(

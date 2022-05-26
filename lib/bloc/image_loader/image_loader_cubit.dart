@@ -20,7 +20,7 @@ class ImageLoaderCubit extends Cubit<ImageLoaderState> {
         final List<String> currentImageList = [];
 
         for(int i = 0; i< 4; i++) {
-          currentImageList.add(totalImageList['hits'][i]['previewURL']);
+          currentImageList.add(totalImageList['hits'][i]['webformatURL']);
         }
         emit(ImageLoaderLoaded(currentImageList));
       }
