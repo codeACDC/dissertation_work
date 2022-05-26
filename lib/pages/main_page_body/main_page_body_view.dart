@@ -81,86 +81,131 @@ class _MainPageBodyState extends State<MainPageBody> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
-                    builder: (context, state) {
-                  if (state is ImageLoaderLoading) {
-                    return CircularProgressIndicator(
-                      color: Colors.deepPurple[800],
-                    );
-                  }
-                  if (state is ImageLoaderLoaded) {
-                    return SizedBox(
-                      height: giveH(size: 100, mh: mh),
-                      child: GridView.builder(
-                        itemCount: state.loadedImages.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                          ),
-                          itemBuilder: (context, index) {
-                            return CachedNetworkImage(imageUrl: state.loadedImages[index]);
-                          }),
-                    );
-                  }
-                  if (state is ImageLoaderError) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                      state.errorMessage,
-                      style: Theme.of(context).textTheme.headline3,
-                    )));
-                  }
-                  return Container();
-                }),
-                SizedBox(
-                  width: mw,
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: giveW(size: 15, mw: mw),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: ReplaceInherited.of(context)
-                            .emptyStringList!
-                            .map((e) => CustomWidget(
-                                  mw: mw,
-                                  mh: mh,
-                                  letterElem: e,
-                                ))
-                            .toList(),
+            child: Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: giveW(size: 10, mw: mw)),
+              child: BlocProvider<ImageLoaderCubit>(
+                create: (context) =>
+                    ImageLoaderCubit(searchText: Constants.keyWords[0])
+                      ..getPhotos(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: giveH(size: 10, mh: mh)),
+                        child: BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
+                            buildWhen: (previousState, currentState) =>
+                                previousState != currentState,
+                            builder: (context, state) {
+                              if (state is ImageLoaderLoading) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.deepPurple[800],
+                                  ),
+                                );
+                              }
+                              if (state is ImageLoaderLoaded) {
+                                return GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: state.loadedImages.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 1.15,
+                                      mainAxisSpacing: giveW(size: 10, mw: mw),
+                                      crossAxisSpacing: giveW(size: 10, mw: mw),
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return CachedNetworkImage(
+                                          imageBuilder: (context, provider) =>
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: provider),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            giveH(
+                                                                size: 10,
+                                                                mh: mh))),
+                                              ),
+                                          filterQuality: FilterQuality.low,
+                                          fit: BoxFit.cover,
+                                          imageUrl: state.loadedImages[index],
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                          progressIndicatorBuilder:
+                                              (context, url, downloadProgress) {
+                                            return CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: Colors.deepPurple[800],
+                                            );
+                                          });
+                                    });
+                              }
+                              if (state is ImageLoaderError) {
+                                Future.delayed(Duration.zero, () async {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                          content: Text(
+                                    state.errorMessage,
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  )));
+                                });
+                              }
+                              return Container();
+                            }),
                       ),
                     ),
-                  ),
+                    Container(
+                      width: mw,
+                      margin: EdgeInsets.symmetric(
+                          vertical: giveH(size: 10, mh: mh)),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: ReplaceInherited.of(context)
+                              .emptyStringList!
+                              .map((e) => CustomWidget(
+                                    mw: mw,
+                                    mh: mh,
+                                    letterElem: e,
+                                  ))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: giveH(size: 79, mh: mh),
+                      margin: EdgeInsets.symmetric(
+                          vertical: giveH(size: 10, mh: mh)),
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ReplaceInherited.of(context)
+                            .randomLetterList!
+                            .length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 6),
+                        itemBuilder: (context, index) {
+                          return CustomWidget(
+                            mw: mw,
+                            mh: mh,
+                            letterElem: ReplaceInherited.of(context)
+                                .randomLetterList![index],
+                          );
+                        },
+                      ),
+                    )
+                  ],
                 ),
-                Container(
-                  height: giveH(size: 79, mh: mh),
-                  margin: EdgeInsets.only(
-                      bottom: giveH(size: 30, mh: mh),
-                      top: giveH(size: 30, mh: mh)),
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        ReplaceInherited.of(context).randomLetterList!.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 6),
-                    itemBuilder: (context, index) {
-                      return CustomWidget(
-                        mw: mw,
-                        mh: mh,
-                        letterElem: ReplaceInherited.of(context)
-                            .randomLetterList![index],
-                      );
-                    },
-                  ),
-                )
-              ],
+              ),
             ),
           );
         },
