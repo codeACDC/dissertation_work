@@ -15,11 +15,10 @@ class CustomWidget extends StatelessWidget {
 
   final double mw;
   final double mh;
-  final LetterClass letterElem;
+  final LetterModel letterElem;
 
   @override
   Widget build(BuildContext context) {
-    bool isTap = false;
     var tempLetter = letterElem.letter;
     return tempLetter != ''
         ? StatefulBuilder(
@@ -29,10 +28,9 @@ class CustomWidget extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(6),
                   onTap: () {
-                    setState((){
-                      isTap = true;
-                    });
                       ReplaceInherited.of(context).replaceItems(letterElem);
+                      ReplaceInherited.of(context).checkAnswer();
+                      ReplaceInherited.of(context).changeAlign();
                   },
                   child: Container(
                     height:  giveW(size: 50, mw: mw),

@@ -1,4 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:dissertation_work/bloc/image_loader/image_loader_cubit.dart';
 import 'package:dissertation_work/pages/main_page_body/grid_of_image.dart';
 import "package:flutter/material.dart";
@@ -7,9 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../constants/constants.dart';
 import '../../constants/methods/methods.dart';
 
-import '../../widgets/custom_widget.dart';
+import '../../widgets/animated_empty_list_widget.dart';
 import '../../widgets/models/letter_model.dart';
 import '../../widgets/models/replace_model.dart';
+import '../../widgets/random_letter_list_widget.dart';
 import '../../widgets/replace_inherited_widget.dart';
 
 class MainPageBody extends StatefulWidget {
@@ -20,15 +23,23 @@ class MainPageBody extends StatefulWidget {
 }
 
 class _MainPageBodyState extends State<MainPageBody> {
-  late Map<LetterClass, List<dynamic>> saveIndexArray;
-  late List<LetterClass> randomLetterList;
-  late List<LetterClass> emptyStringList;
+  late Map<LetterModel, List<dynamic>> saveIndexArray;
+  late List<LetterModel> randomLetterList;
+  late List<LetterModel> emptyStringList;
+  late String tempKeyWord;
+  late CorrectAnswerModel correctAnswerModel;
+  late Alignment inCorrectAnswerAlign;
+  static List keyWords = ['apple', null];
+  final confettiController =
+      ConfettiController(duration: const Duration(seconds: 1));
 
   @override
   void initState() {
     //Preparation data
-    List<String> tempRandomLetterList =
-        Constants.keyWords[0].toUpperCase().split('');
+    tempKeyWord = keyWords[0];
+    correctAnswerModel =
+        CorrectAnswerModel(correctAnswer: tempKeyWord, isCorrect: keyWords[1]);
+    List<String> tempRandomLetterList = tempKeyWord.toUpperCase().split('');
 
     tempRandomLetterList.addAll(Constants.alphabetList.where((elem) =>
         !tempRandomLetterList.contains(elem) &&
@@ -36,20 +47,20 @@ class _MainPageBodyState extends State<MainPageBody> {
     tempRandomLetterList.shuffle();
 
     List<String> tempEmptyStringList =
-        List<String>.filled(Constants.keyWords[0].length, '');
+        List<String>.filled(tempKeyWord.length, '');
 
     //Preparation LetterClass List
     saveIndexArray = {};
 
     randomLetterList = tempRandomLetterList
-        .map((e) => LetterClass(
+        .map((e) => LetterModel(
               letter: e,
               id: UniqueKey().toString(),
             ))
         .toList();
 
     emptyStringList = tempEmptyStringList
-        .map((e) => LetterClass(
+        .map((e) => LetterModel(
               letter: e,
               id: UniqueKey().toString(),
             ))
@@ -67,11 +78,17 @@ class _MainPageBodyState extends State<MainPageBody> {
           double mh = constraints.maxHeight;
           double mw = constraints.maxWidth;
 
-          ReplaceInherited.of(context).randomLetterListSetter =
-              randomLetterList;
-          ReplaceInherited.of(context).emptyStringListSetter = emptyStringList;
-          ReplaceInherited.of(context).saveIndexArraySetter = saveIndexArray;
-          ReplaceInherited.of(context).keyWordSetter = Constants.keyWords[0];
+          ReplaceInherited.of(context).randomLetterList = randomLetterList;
+          ReplaceInherited.of(context).emptyStringList = emptyStringList;
+          ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
+          ReplaceInherited.of(context).correctAnswerModel = correctAnswerModel;
+          showCongratulation(
+            confettiController: confettiController,
+              isCorrect:
+                  ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
+              context: context,
+              mh: mh,
+              mw: mw);
 
           return Container(
             height: mh,
@@ -88,94 +105,67 @@ class _MainPageBodyState extends State<MainPageBody> {
               //Image load bloc
               child: BlocProvider<ImageLoaderCubit>(
                 create: (context) =>
-                    ImageLoaderCubit(searchText: Constants.keyWords[0])
-                      ..getPhotos(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: giveH(size: 10, mh: mh)),
-                        child: BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
-                            buildWhen: (previousState, currentState) =>
-                                previousState != currentState,
-                            builder: (context, state) {
-                              if (state is ImageLoaderLoading) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.deepPurple[800],
-                                  ),
-                                );
-                              }
-                              if (state is ImageLoaderLoaded) {
-                                return GridOfImage(
-                                    mh: mh,
-                                    mw: mw,
-                                    urlsOfImage: state.loadedImages);
-                              }
-                              if (state is ImageLoaderError) {
-                                Future.delayed(Duration.zero, () async {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                          content: Text(
-                                    state.errorMessage,
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  )));
-                                });
-                              }
-                              return Container();
-                            }),
-                      ),
-                    ),
-
-                    //Empty widget list
-                    Container(
-                      width: mw,
-                      margin: EdgeInsets.symmetric(
-                          vertical: giveH(size: 10, mh: mh)),
-                      child: FittedBox(
-                        fit: BoxFit.cover,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: ReplaceInherited.of(context)
-                              .emptyStringList!
-                              .map((e) => CustomWidget(
-                                    mw: mw,
-                                    mh: mh,
-                                    letterElem: e,
-                                  ))
-                              .toList(),
+                    ImageLoaderCubit(searchText: tempKeyWord)..getPhotos(),
+                child: ConfettiWidget(
+                  maxBlastForce: 50,
+                  gravity: 0.5,
+                  numberOfParticles: 50,
+                  blastDirection: -pi / 2,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  confettiController: confettiController,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: giveH(size: 10, mh: mh)),
+                          child: BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
+                              buildWhen: (previousState, currentState) =>
+                                  previousState != currentState,
+                              builder: (context, state) {
+                                if (state is ImageLoaderLoading) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.deepPurple[800],
+                                    ),
+                                  );
+                                }
+                                if (state is ImageLoaderLoaded) {
+                                  return GridOfImage(
+                                      mh: mh,
+                                      mw: mw,
+                                      urlsOfImage: state.loadedImages);
+                                }
+                                if (state is ImageLoaderError) {
+                                  Future.delayed(Duration.zero, () async {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(
+                                      state.errorMessage,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    )));
+                                  });
+                                }
+                                return Container();
+                              }),
                         ),
                       ),
-                    ),
 
-                    //Letter widget list
-                    Container(
-                      height: giveH(size: 79, mh: mh),
-                      margin: EdgeInsets.symmetric(
-                          vertical: giveH(size: 10, mh: mh)),
-                      child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: ReplaceInherited.of(context)
-                            .randomLetterList!
-                            .length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 6),
-                        itemBuilder: (context, index) {
-                          return CustomWidget(
-                            mw: mw,
-                            mh: mh,
-                            letterElem: ReplaceInherited.of(context)
-                                .randomLetterList![index],
-                          );
-                        },
+                      //Empty widget list
+                      AnimatedEmptyListWidget(
+                        mw: mw,
+                        mh: mh,
+                        correctAnswerModel:
+                            ReplaceInherited.of(context).correctAnswerModel,
                       ),
-                    )
-                  ],
+
+                      //Letter widget list
+                      RandomLetterListWidget(mh: mh, mw: mw)
+                    ],
+                  ),
                 ),
               ),
             ),

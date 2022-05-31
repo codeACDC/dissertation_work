@@ -7,8 +7,6 @@ class Constants {
     'W', 'X', 'Y', 'Z'
   ];
 
-  static const List<String> keyWords = ['apple'];
-
 }
 
 class ConstColor {

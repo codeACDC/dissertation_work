@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../constants/methods/methods.dart';
@@ -6,33 +5,57 @@ import 'image_model.dart';
 import 'letter_model.dart';
 
 class ReplaceModel extends ChangeNotifier {
-  String? keyWord;
-  List<LetterClass>? randomLetterList;
-  List<LetterClass>? emptyStringList;
-  Map<LetterClass, List<dynamic>>? saveIndexArray;
+  List<LetterModel>? randomLetterList;
+  List<LetterModel>? emptyStringList;
+  Map<LetterModel, List<dynamic>>? saveIndexArray;
   List<Widget>? stackChildrenList;
+  CorrectAnswerModel? correctAnswerModel;
+  Alignment? inCorrectAnswerAlign;
 
-  set keyWordSetter(value) => keyWord = value;
+  //empty string list align change func
 
-  set randomLetterListSetter(value) => randomLetterList = value;
+  void changeAlign() {
+    bool isNoNull = [
+      correctAnswerModel,
+    ].every((e) => e != null);
 
-  set emptyStringListSetter(value) => emptyStringList = value;
+          if(correctAnswerModel!.isCorrect == false) {
+            inCorrectAnswerAlign = Alignment.centerRight;
+            notifyListeners();
 
-  set saveIndexArraySetter(value) => saveIndexArray = value;
+            Future.delayed(const Duration(milliseconds: 100), () {
+
+              inCorrectAnswerAlign = Alignment.centerLeft;
+              notifyListeners();
+            },);
+          }
+          Future.delayed(const Duration(milliseconds: 300),() {
+            inCorrectAnswerAlign = null;
+            notifyListeners();
+
+          },);
+
+
+
+
+  }
+
   // replace func for stack children
-  void replaceStackChildren(ImageModel item){
-    if(stackChildrenList != null) {
+  void replaceStackChildren(ImageModel item) {
+    if (stackChildrenList != null) {
       Widget temp;
-      if(item.isTap) {
-        Future.delayed(const Duration(milliseconds: 100),() {
-          temp = stackChildrenList!.last;
-          stackChildrenList!.last = stackChildrenList![item.index];
-          stackChildrenList![item.index] = temp;
-        },);
+      if (item.isTap) {
+        Future.delayed(
+          const Duration(milliseconds: 100),
+          () {
+            temp = stackChildrenList!.last;
+            stackChildrenList!.last = stackChildrenList![item.index];
+            stackChildrenList![item.index] = temp;
+          },
+        );
         item.isTap = false;
         notifyListeners();
-      }
-      else {
+      } else {
         temp = stackChildrenList!.last;
         stackChildrenList!.last = stackChildrenList![item.index];
         stackChildrenList![item.index] = temp;
@@ -41,72 +64,96 @@ class ReplaceModel extends ChangeNotifier {
       }
     }
   }
-// replace func for letters
-  void replaceItems(LetterClass letterObject) {
+
+// check for correct answer
+  void checkAnswer() {
     bool isNoNull = [
-      keyWord,
       randomLetterList,
       emptyStringList,
-      saveIndexArray
+      saveIndexArray,
+      correctAnswerModel,
+    ].every((element) => element != null);
+    if (isNoNull && emptyStringList!.every((e) => e.letter.isNotEmpty)) {
+      String enterAnswer = emptyStringList!
+          .map((e) {
+            return e.letter;
+          })
+          .join()
+          .toLowerCase()
+          .trim();
+      String correctAnswer = correctAnswerModel!.correctAnswer;
+
+      if (correctAnswer == enterAnswer) {
+        correctAnswerModel!.isCorrect = true;
+        notifyListeners();
+      } else {
+
+        correctAnswerModel!.isCorrect = false;
+        notifyListeners();
+      }
+    }
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () {
+        correctAnswerModel!.isCorrect = null;
+        notifyListeners();
+      },
+    );
+  }
+
+// replace func for letters
+  void replaceItems(LetterModel letterObject) {
+    bool isNoNull = [
+      randomLetterList,
+      emptyStringList,
+      saveIndexArray,
+      correctAnswerModel,
     ].every((element) => element != null);
     if (isNoNull) {
-      //String _totalAnswer = _saveIndexArray!.keys.join();
-
-      if (emptyStringList!.every((element) => element.letter.isNotEmpty)) {
-      } else {
-        if (containsKeyExtend(
-          letterClassObject: letterObject,
+      if (containsKeyExtend(
+        letterClassObject: letterObject,
+        letterMap: saveIndexArray!,
+      )) {
+        List tempPositionList = valueExtend(
           letterMap: saveIndexArray!,
-        )) {
-          List tempPositionList = valueExtend(
-            letterMap: saveIndexArray!,
-            letterObject: letterObject,
-          );
+          letterObject: letterObject,
+        );
 
-          int randomLetterIndex = tempPositionList[0];
-          int emptyStringIndex = tempPositionList[1];
+        int randomLetterIndex = tempPositionList[0];
+        int emptyStringIndex = tempPositionList[1];
 
-
-            LetterClass tempVar = emptyStringList![randomLetterIndex];
-            emptyStringList![randomLetterIndex] =
+        LetterModel tempVar = emptyStringList![randomLetterIndex];
+        emptyStringList![randomLetterIndex] =
             randomLetterList![emptyStringIndex];
-            randomLetterList![emptyStringIndex] = tempVar;
+        randomLetterList![emptyStringIndex] = tempVar;
 
-            saveIndexArray!.removeWhere(((key, value) {
-              bool isExist =
-                  key.letter == letterObject.letter && key.id == letterObject.id;
-              return isExist;
-            }));
+        saveIndexArray!.removeWhere(((key, value) {
+          bool isExist =
+              key.letter == letterObject.letter && key.id == letterObject.id;
+          return isExist;
+        }));
 
-            notifyListeners();
+        notifyListeners();
+      } else {
+        int emptyStringIndex =
+            emptyStringList!.indexWhere((element) => element.letter.isEmpty);
+        int randomLetterIndex = randomLetterList!.indexWhere(
+          (element) =>
+              element.letter == letterObject.letter &&
+              element.id == letterObject.id,
+        );
 
-
-        } else {
-
-          int emptyStringIndex =
-          emptyStringList!.indexWhere((element) => element.letter.isEmpty);
-          int randomLetterIndex = randomLetterList!.indexWhere(
-                (element) =>
-            element.letter == letterObject.letter &&
-                element.id == letterObject.id,
-          );
-
-
-            LetterClass tempVar = emptyStringList![emptyStringIndex];
-            emptyStringList![emptyStringIndex] =
+        LetterModel tempVar = emptyStringList![emptyStringIndex];
+        emptyStringList![emptyStringIndex] =
             randomLetterList![randomLetterIndex];
-            randomLetterList![randomLetterIndex] = tempVar;
+        randomLetterList![randomLetterIndex] = tempVar;
 
-            Map<LetterClass, List<int>> tempMap = {
-              letterObject: [emptyStringIndex, randomLetterIndex]
-            };
-            saveIndexArray!.addEntries(tempMap.entries);
-            notifyListeners();
-
-        }
+        Map<LetterModel, List<int>> tempMap = {
+          letterObject: [emptyStringIndex, randomLetterIndex]
+        };
+        saveIndexArray!.addEntries(tempMap.entries);
+        notifyListeners();
       }
     }
   }
 }
-
-
