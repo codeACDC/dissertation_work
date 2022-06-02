@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:dissertation_work/bloc/image_loader/image_loader_cubit.dart';
-import 'package:dissertation_work/pages/main_page_body/grid_of_image.dart';
+import 'package:dissertation_work/pages/main_page/main_page_body/grid_of_image.dart';
+import 'package:dissertation_work/widgets/widgets.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/constants.dart';
-import '../../constants/methods/methods.dart';
-
-import '../../widgets/animated_empty_list_widget.dart';
-import '../../widgets/models/letter_model.dart';
-import '../../widgets/models/replace_model.dart';
-import '../../widgets/random_letter_list_widget.dart';
-import '../../widgets/replace_inherited_widget.dart';
+import '../../../constants/constants.dart';
+import '../../../constants/methods/methods.dart';
+import '../../../widgets/animated_empty_list_widget.dart';
+import '../../../widgets/models/letter_model.dart';
+import '../../../widgets/models/replace_model.dart';
+import '../../../widgets/random_letter_list_widget.dart';
+import '../../../widgets/replace_inherited_widget.dart';
 
 class MainPageBody extends StatefulWidget {
   const MainPageBody({Key? key}) : super(key: key);
@@ -29,9 +29,9 @@ class _MainPageBodyState extends State<MainPageBody> {
   late String tempKeyWord;
   late CorrectAnswerModel correctAnswerModel;
   late Alignment inCorrectAnswerAlign;
-  static List keyWords = ['apple', null];
+  static List keyWords = ['cat', null];
   final confettiController =
-      ConfettiController(duration: const Duration(seconds: 1));
+      ConfettiController(duration: const Duration(milliseconds: 500,));
 
   @override
   void initState() {
@@ -82,7 +82,9 @@ class _MainPageBodyState extends State<MainPageBody> {
           ReplaceInherited.of(context).emptyStringList = emptyStringList;
           ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
           ReplaceInherited.of(context).correctAnswerModel = correctAnswerModel;
+
           showCongratulation(
+            keyWord: tempKeyWord,
             confettiController: confettiController,
               isCorrect:
                   ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
@@ -139,15 +141,23 @@ class _MainPageBodyState extends State<MainPageBody> {
                                       urlsOfImage: state.loadedImages);
                                 }
                                 if (state is ImageLoaderError) {
-                                  Future.delayed(Duration.zero, () async {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            content: Text(
-                                      state.errorMessage,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    )));
-                                  });
+                                  Future.delayed(Duration.zero, () {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        duration: const Duration(seconds: 10),
+                                        backgroundColor: Colors.deepPurple[800],
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(giveH(size: 10, mh: mh))),
+                                        content: SizedBox(
+                                          height: giveH(size: 50, mh: mh),
+                                          child: flexTextWidget(
+                                              boxFit: BoxFit.contain  ,
+                                              text: state.errorMessage,
+                                              fontSize: giveH(size: 25, mh: mh),
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white),
+                                        )));
+                                  },);
                                 }
                                 return Container();
                               }),
@@ -155,11 +165,14 @@ class _MainPageBodyState extends State<MainPageBody> {
                       ),
 
                       //Empty widget list
-                      AnimatedEmptyListWidget(
-                        mw: mw,
-                        mh: mh,
-                        correctAnswerModel:
-                            ReplaceInherited.of(context).correctAnswerModel,
+                      SizedBox(
+                        width: giveW(size: mw, mw: mw),
+                        child: AnimatedEmptyListWidget(
+                          mw: mw,
+                          mh: mh,
+                          correctAnswerModel:
+                              ReplaceInherited.of(context).correctAnswerModel,
+                        ),
                       ),
 
                       //Letter widget list

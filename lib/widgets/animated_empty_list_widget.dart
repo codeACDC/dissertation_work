@@ -21,11 +21,10 @@ class AnimatedEmptyListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedAlign(
       alignment: ReplaceInherited.of(context).inCorrectAnswerAlign ?? Alignment.center,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 100),
 
       child: Container(
         height: giveW(size: 70, mw: mw),
-        width: mw - 50,
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(

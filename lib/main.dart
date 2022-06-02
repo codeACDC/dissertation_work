@@ -1,7 +1,8 @@
 import 'package:dissertation_work/constants/constants.dart';
+import 'package:dissertation_work/pages/page_of_translation/translation_page.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/main_page.dart';
+import 'pages/main_page/main_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -17,6 +18,10 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: ConstColor.blackBoard0C,
       ),
       home: const MainPage(),
+      routes: {
+        MainPage.id: (context)=> const MainPage(),
+        TranslationPage.id: (context) => const TranslationPage(),
+      },
     );
   }
 }

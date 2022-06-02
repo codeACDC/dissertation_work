@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../../pages/page_of_translation/translation_page.dart';
 import '../../widgets/models/letter_model.dart';
 
 double giveH({
@@ -64,6 +65,7 @@ void showCongratulation({
   required BuildContext context,
   required double mh,
   required double mw,
+  required String keyWord,
   required ConfettiController confettiController,
 }) {
   if (isCorrect == true) {
@@ -81,7 +83,11 @@ void showCongratulation({
                       child: flexTextWidget(
                           text: 'Правильно!', fontSize: giveH(size: 20, mh: mh), color: Colors.white));
             }
-          ),
+          ),onVisible: (){
+            Future.delayed(const Duration(milliseconds: 2800),() {
+              Navigator.of(context).pushReplacementNamed(TranslationPage.id, arguments: keyWord);
+            },);
+        },
           duration: const Duration(seconds: 2),
           dismissDirection: DismissDirection.none,
           backgroundColor: Colors.deepPurple[800],
