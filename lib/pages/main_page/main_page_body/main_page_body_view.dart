@@ -29,7 +29,7 @@ class _MainPageBodyState extends State<MainPageBody> {
   late String tempKeyWord;
   late CorrectAnswerModel correctAnswerModel;
   late Alignment inCorrectAnswerAlign;
-  static List keyWords = ['cat', null];
+  static List keyWords = ['dog', null];
   final confettiController =
       ConfettiController(duration: const Duration(milliseconds: 500,));
 
@@ -165,14 +165,11 @@ class _MainPageBodyState extends State<MainPageBody> {
                       ),
 
                       //Empty widget list
-                      SizedBox(
-                        width: giveW(size: mw, mw: mw),
-                        child: AnimatedEmptyListWidget(
-                          mw: mw,
-                          mh: mh,
-                          correctAnswerModel:
-                              ReplaceInherited.of(context).correctAnswerModel,
-                        ),
+                      AnimatedEmptyListWidget(
+                        mw: mw,
+                        mh: mh,
+                        correctAnswerModel:
+                            ReplaceInherited.of(context).correctAnswerModel,
                       ),
 
                       //Letter widget list

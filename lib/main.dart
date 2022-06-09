@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dissertation app',
+      title: 'Word finder',
       theme: Theme.of(context).copyWith(
         scaffoldBackgroundColor: ConstColor.blackBoard0C,
       ),

@@ -18,14 +18,28 @@ class TranslationWidget extends StatelessWidget {
     required this.translationMap,
   }) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
-
     // List<Map>
-    final translationList =
-    translationMap['tr'];
+    final translationList = translationMap['tr'];
+
+
+    List synonymsList = translationList.map((e) {
+      if (e.containsKey('syn')) {
+        for(int i = 0; i < e['syn'].length; i++){
+          return e['syn'][i]['text'];
+        }
+      }
+    }).toList();
+
+    synonymsList.removeWhere((element) => element == null);
+    List exampleList = translationList.map((element) {
+      if(element.containsKey('ex'))
+        {
+          List tempList = (element['ex'] as List);
+        }
+    }).toList();
+    print(exampleList);
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: giveH(size: 10, mh: mh)),
@@ -40,54 +54,55 @@ class TranslationWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              TitleTranslationWidget(mh: mh, mw: mw, translationMap: translationMap),
-              WordTranslationsWidget(mw: mw, mh: mh, translationList: translationList),
-             ...translationList.map((e)=> e.containsKey('syn') ? Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: giveH(size: 5, mh: mh)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            flexTextWidget(
-                              text: 'Синонимы:',
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                            Expanded(
-                                child: Wrap(
-                                    alignment: WrapAlignment.end,
-                                    runSpacing: giveW(size: 5, mw: mw),
-                                    spacing: giveW(size: 5, mw: mw),
-                                    children: [...e['syn'].map( (e)=>
-
-                                Container(
-                                        margin: EdgeInsets.only(
-                                          bottom: giveH(size: 5, mh: mh),
-                                          // right: giveH(size: 5, mh: mh),
-                                          // left: giveH(size: 5, mh: mh),
-                                        ),
-                                        height: giveH(size: 16, mh: mh),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(
-                                              giveH(size: 2, mh: mh)),
-                                          child: flexTextWidget(
-                                            boxFit: BoxFit.contain,
-                                            text: e['text'],
-                                            fontSize: giveH(size: 11, mh: mh),
-                                            color: ConstColor.translationText,
-                                          ),
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              ConstColor.translationContainerBG,
-                                          borderRadius: BorderRadius.circular(
-                                              giveH(size: 20, mh: mh)),
-                                        )))
-                                ]))
-                          ],
-                        ),
-                      ):const SizedBox()),
+              TitleTranslationWidget(
+                  mh: mh, mw: mw, translationMap: translationMap),
+              WordTranslationsWidget(
+                  mw: mw, mh: mh, translationList: translationList),
+              synonymsList.isEmpty?const SizedBox():
+              Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: giveH(size: 5, mh: mh)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          flexTextWidget(
+                            text: 'Синонимы:',
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                          Expanded(
+                              child: Wrap(
+                                  alignment: WrapAlignment.end,
+                                  runSpacing: giveW(size: 5, mw: mw),
+                                  spacing: giveW(size: 5, mw: mw),
+                                  children: [
+                                ...synonymsList.map((e) => Container(
+                                    margin: EdgeInsets.only(
+                                      bottom: giveH(size: 5, mh: mh),
+                                      // right: giveH(size: 5, mh: mh),
+                                      // left: giveH(size: 5, mh: mh),
+                                    ),
+                                    height: giveH(size: 16, mh: mh),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          giveH(size: 2, mh: mh)),
+                                      child: flexTextWidget(
+                                        boxFit: BoxFit.contain,
+                                        text: e,
+                                        fontSize: giveH(size: 11, mh: mh),
+                                        color: ConstColor.translationText,
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: ConstColor.translationContainerBG,
+                                      borderRadius: BorderRadius.circular(
+                                          giveH(size: 20, mh: mh)),
+                                    )))
+                              ]))
+                        ],
+                      ),
+                    ),
               ...translationList.map((e) => e.containsKey('ex')
                   ? Container(
                       margin: EdgeInsets.symmetric(
@@ -162,4 +177,3 @@ class TranslationWidget extends StatelessWidget {
     );
   }
 }
-

@@ -21,7 +21,7 @@ class MainPage extends StatelessWidget {
         ),
         backgroundColor: Colors.deepPurple[800],
         title: flexTextWidget(
-          text: 'Dissertation app',
+          text: 'Word finder',
           fontSize: 25,
           fontWeight: FontWeight.w600,
           color: Colors.white,
