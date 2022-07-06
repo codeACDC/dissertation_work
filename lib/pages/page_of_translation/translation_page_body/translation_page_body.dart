@@ -9,9 +9,13 @@ import '../../../constants/constants.dart';
 
 class TranslationPageBody extends StatelessWidget {
   final String keyWord;
+  final List<String> imagesUrl;
 
-  const TranslationPageBody({Key? key, required this.keyWord})
-      : super(key: key);
+  const TranslationPageBody({
+    Key? key,
+    required this.keyWord,
+    required this.imagesUrl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +69,11 @@ class TranslationPageBody extends StatelessWidget {
                 }
                 if (state is TranslatorLoaded) {
                   final List definitionList = state.loadedTranslation;
+
+                  addNewAnswerModel(keyWord: keyWord,
+                      imagesUrl: imagesUrl,
+                      totalList: definitionList
+                  );
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(
@@ -82,7 +91,10 @@ class TranslationPageBody extends StatelessWidget {
                             color: Colors.white,
                           ),
                           ...definitionList.map((e) => TranslationWidget(
-                              mh: mh, mw: mw, translationMap: e)),
+                                mh: mh,
+                                mw: mw,
+                                translationMap: e,
+                              )),
                         ],
                       ),
                     ),

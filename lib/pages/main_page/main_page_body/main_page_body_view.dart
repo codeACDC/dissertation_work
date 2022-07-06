@@ -23,22 +23,28 @@ class MainPageBody extends StatefulWidget {
 }
 
 class _MainPageBodyState extends State<MainPageBody> {
-  late Map<LetterModel, List<dynamic>> saveIndexArray;
-  late List<LetterModel> randomLetterList;
-  late List<LetterModel> emptyStringList;
-  late String tempKeyWord;
-  late CorrectAnswerModel correctAnswerModel;
-  late Alignment inCorrectAnswerAlign;
-  static List keyWords = ['dog', null];
-  final confettiController =
-      ConfettiController(duration: const Duration(milliseconds: 500,));
+  late final Map<LetterModel, List<dynamic>> saveIndexArray;
+  late final List<LetterModel> randomLetterList;
+  late final List<LetterModel> emptyStringList;
+  late final String tempKeyWord;
+  late final CorrectAnswerModel correctAnswerModel;
+  late final Alignment inCorrectAnswerAlign;
+  final confettiController = ConfettiController(
+      duration: const Duration(
+    milliseconds: 500,
+  ));
 
   @override
   void initState() {
+    //check for changes in keyWord list
+    detectChanges();
+
     //Preparation data
-    tempKeyWord = keyWords[0];
+    tempKeyWord = nextKeyWord(keyWordList: Constants.keyWords);
+
+    print(tempKeyWord);
     correctAnswerModel =
-        CorrectAnswerModel(correctAnswer: tempKeyWord, isCorrect: keyWords[1]);
+        CorrectAnswerModel(correctAnswer: tempKeyWord, isCorrect: null);
     List<String> tempRandomLetterList = tempKeyWord.toUpperCase().split('');
 
     tempRandomLetterList.addAll(Constants.alphabetList.where((elem) =>
@@ -65,7 +71,6 @@ class _MainPageBodyState extends State<MainPageBody> {
               id: UniqueKey().toString(),
             ))
         .toList();
-
     super.initState();
   }
 
@@ -82,15 +87,24 @@ class _MainPageBodyState extends State<MainPageBody> {
           ReplaceInherited.of(context).emptyStringList = emptyStringList;
           ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
           ReplaceInherited.of(context).correctAnswerModel = correctAnswerModel;
+          if (ReplaceInherited.of(context).imagesUrl != null) {
 
-          showCongratulation(
-            keyWord: tempKeyWord,
-            confettiController: confettiController,
-              isCorrect:
+            addToKeyWordBoxWhenTrue(
+              isAnswerCorrect:
                   ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
-              context: context,
-              mh: mh,
-              mw: mw);
+              keyWord: tempKeyWord,
+            );
+
+            showCongratulation(
+                keyWord: tempKeyWord,
+                imagesUrl: ReplaceInherited.of(context).imagesUrl!,
+                confettiController: confettiController,
+                isCorrect:
+                    ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
+                context: context,
+                mh: mh,
+                mw: mw);
+          }
 
           return Container(
             height: mh,
@@ -123,7 +137,8 @@ class _MainPageBodyState extends State<MainPageBody> {
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               vertical: giveH(size: 10, mh: mh)),
-                          child: BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
+                          child: BlocBuilder<ImageLoaderCubit,
+                                  ImageLoaderState>(
                               buildWhen: (previousState, currentState) =>
                                   previousState != currentState,
                               builder: (context, state) {
@@ -135,29 +150,40 @@ class _MainPageBodyState extends State<MainPageBody> {
                                   );
                                 }
                                 if (state is ImageLoaderLoaded) {
+                                  ReplaceInherited.of(context).imagesUrl =
+                                      state.loadedImages;
+
                                   return GridOfImage(
                                       mh: mh,
                                       mw: mw,
                                       urlsOfImage: state.loadedImages);
                                 }
                                 if (state is ImageLoaderError) {
-                                  Future.delayed(Duration.zero, () {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        duration: const Duration(seconds: 10),
-                                        backgroundColor: Colors.deepPurple[800],
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(giveH(size: 10, mh: mh))),
-                                        content: SizedBox(
-                                          height: giveH(size: 50, mh: mh),
-                                          child: flexTextWidget(
-                                              boxFit: BoxFit.contain  ,
-                                              text: state.errorMessage,
-                                              fontSize: giveH(size: 25, mh: mh),
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                        )));
-                                  },);
+                                  print(state.errorMessage);
+                                  Future.delayed(
+                                    Duration.zero,
+                                    () {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              duration:
+                                                  const Duration(seconds: 10),
+                                              backgroundColor:
+                                                  Colors.deepPurple[800],
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          giveH(
+                                                              size: 10,
+                                                              mh: mh))),
+                                              content: flexTextWidget(
+                                                  boxFit: BoxFit.contain,
+                                                  text: state.errorMessage,
+                                                  fontSize:
+                                                      giveH(size: 25, mh: mh),
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white)));
+                                    },
+                                  );
                                 }
                                 return Container();
                               }),

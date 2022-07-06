@@ -5,6 +5,7 @@ import 'image_model.dart';
 import 'letter_model.dart';
 
 class ReplaceModel extends ChangeNotifier {
+  List<String>? imagesUrl;
   List<LetterModel>? randomLetterList;
   List<LetterModel>? emptyStringList;
   Map<LetterModel, List<dynamic>>? saveIndexArray;
@@ -15,9 +16,9 @@ class ReplaceModel extends ChangeNotifier {
   //empty string list align change func
 
   void changeAlign() {
-    bool isNoNull = [
-      correctAnswerModel,
-    ].every((e) => e != null);
+    // bool isNoNull = [
+    //   correctAnswerModel,
+    // ].every((e) => e != null);
 
           if(correctAnswerModel!.isCorrect == false) {
             inCorrectAnswerAlign = Alignment.centerRight;

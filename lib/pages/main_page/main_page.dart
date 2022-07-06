@@ -1,4 +1,5 @@
 import 'package:dissertation_work/constants/methods/methods.dart';
+import 'package:dissertation_work/pages/main_page/drawer/main_page_drawer.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double mh = MediaQuery.of(context).size.height;
+    double mw = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         shape:  RoundedRectangleBorder(
@@ -27,6 +29,7 @@ class MainPage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+      drawer: MainPageDrawer(mw: mw, mh: mh),
       body: const SafeArea(child: MainPageBody()),
     );
   }

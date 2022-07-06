@@ -12,7 +12,10 @@ class TranslationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tempKeyWord = ModalRoute.of(context)!.settings.arguments ?? '';
+    final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
+    final String tempKeyWord = tempArgs[0];
+    final List<String> tempImagesUrl = tempArgs[1];
+
     final keyWord = tempKeyWord.toString();
     double mh = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -25,7 +28,7 @@ class TranslationPage extends StatelessWidget {
             'Слово ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
         backgroundColor: Colors.deepPurple[800],
       ),
-      body: SafeArea(child: TranslationPageBody(keyWord: keyWord)),
+      body: SafeArea(child: TranslationPageBody(keyWord: keyWord, imagesUrl: tempImagesUrl)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(
