@@ -18,30 +18,24 @@ class AnswerModelAdapter extends TypeAdapter<AnswerModel> {
     };
     return AnswerModel(
       word: fields[0] as String,
+      imagesUrl: fields[2] == null ? [] : (fields[2] as List).cast<dynamic>(),
+      totalList: fields[3] == null ? [] : (fields[3] as List).cast<dynamic>(),
       isCorrectAnswer: fields[1] == null ? false : fields[1] as bool,
-    )
-      ..synonyms =
-          fields[2] == null ? [] : (fields[2] as List?)?.cast<dynamic>()
-      ..examples =
-          fields[3] == null ? [] : (fields[3] as List?)?.cast<dynamic>()
-      ..translates =
-          fields[4] == null ? [] : (fields[4] as List?)?.cast<dynamic>();
+    );
   }
 
   @override
   void write(BinaryWriter writer, AnswerModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.word)
       ..writeByte(1)
       ..write(obj.isCorrectAnswer)
       ..writeByte(2)
-      ..write(obj.synonyms)
+      ..write(obj.imagesUrl)
       ..writeByte(3)
-      ..write(obj.examples)
-      ..writeByte(4)
-      ..write(obj.translates);
+      ..write(obj.totalList);
   }
 
   @override

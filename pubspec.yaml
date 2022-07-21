@@ -42,6 +42,12 @@ dependencies:
   confetti: ^0.7.0
   hive: ^2.2.1
   hive_flutter: ^1.1.0
+  carousel_slider: ^4.1.1
+  firebase_core: ^1.19.1
+  firebase_auth: ^3.4.1
+  cloud_firestore: ^3.2.1
+  firebase_storage: ^10.3.1
+  just_audio: ^0.9.28
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +72,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - lib/sound_effects/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

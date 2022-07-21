@@ -88,7 +88,6 @@ class _MainPageBodyState extends State<MainPageBody> {
           ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
           ReplaceInherited.of(context).correctAnswerModel = correctAnswerModel;
           if (ReplaceInherited.of(context).imagesUrl != null) {
-
             addToKeyWordBoxWhenTrue(
               isAnswerCorrect:
                   ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
@@ -137,56 +136,61 @@ class _MainPageBodyState extends State<MainPageBody> {
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               vertical: giveH(size: 10, mh: mh)),
-                          child: BlocBuilder<ImageLoaderCubit,
-                                  ImageLoaderState>(
-                              buildWhen: (previousState, currentState) =>
-                                  previousState != currentState,
-                              builder: (context, state) {
-                                if (state is ImageLoaderLoading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.deepPurple[800],
-                                    ),
-                                  );
-                                }
-                                if (state is ImageLoaderLoaded) {
-                                  ReplaceInherited.of(context).imagesUrl =
-                                      state.loadedImages;
+                          child:
+                              BlocBuilder<ImageLoaderCubit, ImageLoaderState>(
+                                  buildWhen: (previousState, currentState) =>
+                                      previousState != currentState,
+                                  builder: (context, state) {
+                                    if (state is ImageLoaderLoading) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.deepPurple[800],
+                                        ),
+                                      );
+                                    }
+                                    if (state is ImageLoaderLoaded) {
+                                      ReplaceInherited.of(context).imagesUrl =
+                                          state.loadedImages;
 
-                                  return GridOfImage(
-                                      mh: mh,
-                                      mw: mw,
-                                      urlsOfImage: state.loadedImages);
-                                }
-                                if (state is ImageLoaderError) {
-                                  print(state.errorMessage);
-                                  Future.delayed(
-                                    Duration.zero,
-                                    () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              duration:
-                                                  const Duration(seconds: 10),
-                                              backgroundColor:
-                                                  Colors.deepPurple[800],
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          giveH(
-                                                              size: 10,
-                                                              mh: mh))),
-                                              content: flexTextWidget(
-                                                  boxFit: BoxFit.contain,
-                                                  text: state.errorMessage,
-                                                  fontSize:
-                                                      giveH(size: 25, mh: mh),
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white)));
-                                    },
-                                  );
-                                }
-                                return Container();
-                              }),
+                                      return GridOfImage(
+                                          mh: mh,
+                                          mw: mw,
+                                          urlsOfImage: state.loadedImages);
+                                    }
+                                    if (state is ImageLoaderError) {
+                                      debugPrint(state.errorMessage);
+                                      return Center(
+                                        child: MaterialButton(
+                                          elevation: giveH(size: 3, mh: mh),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                giveH(size: 5, mh: mh)),
+                                          ),
+                                          onPressed: () {
+                                            context
+                                                .read<ImageLoaderCubit>()
+                                                .getPhotos();
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                Icons.repeat,
+                                                color: Colors.white,
+                                              ),
+                                              flexTextWidget(
+                                                  text: '  Повторить',
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400)
+                                            ],
+                                          ),
+                                          color: Colors.deepPurple[800],
+                                        ),
+                                      );
+                                    }
+                                    return Container();
+                                  }),
                         ),
                       ),
 

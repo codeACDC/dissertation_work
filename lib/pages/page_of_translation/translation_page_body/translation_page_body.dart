@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants/constants.dart';
+import '../../../widgets/translations_inherited.dart';
 
 class TranslationPageBody extends StatelessWidget {
   final String keyWord;
@@ -39,25 +40,33 @@ class TranslationPageBody extends StatelessWidget {
                   previousState != currentState,
               builder: (context, state) {
                 if (state is TranslatorError) {
-                  Future.delayed(
-                    Duration.zero,
-                    () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          duration: const Duration(seconds: 10),
-                          backgroundColor: Colors.deepPurple[800],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  giveH(size: 10, mh: mh))),
-                          content: SizedBox(
-                            height: giveH(size: 50, mh: mh),
-                            child: flexTextWidget(
-                                boxFit: BoxFit.contain,
-                                text: state.translationError,
-                                fontSize: giveH(size: 25, mh: mh),
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white),
-                          )));
-                    },
+                  return Center(
+                    child: MaterialButton(
+                      elevation: giveH(size: 3, mh: mh),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            giveH(size: 5, mh: mh)),
+                      ),
+                      onPressed: () {
+                        context
+                            .read<TranslatorCubit>().translationParser();
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.repeat,
+                            color: Colors.white,
+                          ),
+                          flexTextWidget(
+                              text: '  Повторить',
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400)
+                        ],
+                      ),
+                      color: Colors.deepPurple[800],
+                    ),
                   );
                 }
                 if (state is TranslatorLoading) {
@@ -69,11 +78,11 @@ class TranslationPageBody extends StatelessWidget {
                 }
                 if (state is TranslatorLoaded) {
                   final List definitionList = state.loadedTranslation;
-
                   addNewAnswerModel(keyWord: keyWord,
                       imagesUrl: imagesUrl,
                       totalList: definitionList
                   );
+                  TranslationInherited.of(context).translation = state.loadedTranslation;
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(

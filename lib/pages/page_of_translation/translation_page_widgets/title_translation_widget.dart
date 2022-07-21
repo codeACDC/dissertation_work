@@ -22,32 +22,36 @@ class TitleTranslationWidget extends StatelessWidget {
       height: giveH(size: 16, mh: mh),
       width: mw,
       margin: EdgeInsets.only(bottom: giveH(size: 5, mh: mh)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          translationMap.containsKey('text')
-              ? flexTextWidget(
-              boxFit: BoxFit.contain,
-              text: translationMap['text'],
-              color: ConstColor.translationText,
-              fontSize: giveH(size: 16, mh: mh))
-              : const SizedBox(),
-          translationMap.containsKey('ts')
-              ? flexTextWidget(
-              boxFit: BoxFit.contain,
-              text: ' [${translationMap['ts']}] ',
-              color: ConstColor.translationText,
-              fontSize: giveH(size: 16, mh: mh))
-              : const SizedBox(),
-          translationMap.containsKey('pos')
-              ? flexTextWidget(
-              boxFit: BoxFit.contain,
-              text: ' /${translationMap['pos']}/ ',
-              color: ConstColor.translationText,
-              fontSize: giveH(size: 16, mh: mh))
-              : const SizedBox(),
-        ],
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            translationMap.containsKey('text')
+                ? flexTextWidget(
+                boxFit: BoxFit.contain,
+                text: translationMap['text'],
+                color: ConstColor.translationText,
+                fontSize: giveH(size: 16, mh: mh))
+                : const SizedBox(),
+            translationMap.containsKey('ts')
+                ? flexTextWidget(
+                boxFit: BoxFit.contain,
+                text: ' [${translationMap['ts']}] ',
+                color: ConstColor.translationText,
+                fontSize: giveH(size: 16, mh: mh))
+                : const SizedBox(),
+            translationMap.containsKey('pos')
+                ? flexTextWidget(
+                boxFit: BoxFit.contain,
+                text: ' /${translationMap['pos']}/ ',
+                color: ConstColor.translationText,
+                fontSize: giveH(size: 16, mh: mh))
+                : const SizedBox(),
+          ],
+        ),
       ),
     );
   }

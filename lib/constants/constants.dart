@@ -7,10 +7,13 @@ class Constants {
     'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U','V',
     'W', 'X', 'Y', 'Z'
   ];
-  static const List<String> keyWords = ['dog', 'cat', 'fish', 'monkey'];
+  static const List<String> keyWords = ['dog', 'cat', 'fish', 'monkey','sheep','goat','clock'];
   static const answerBox = 'answer_box';
   static const keyWordBox = 'key_word_box';
   static const saveChangeBox = 'save_change_box';
+  static const fireBaseBox = 'fire_base_box';
+  static const firebaseCollectionName = 'keyWords';
+  static const firebaseKeyWordDocName = 'nouns';
 
 }
 

@@ -5,26 +5,18 @@ part 'answer_model.g.dart';
 class AnswerModel extends HiveObject{
   @HiveField(0)
   final String word;
-  @HiveField(1,defaultValue: false)
+  @HiveField(1, defaultValue: false)
   bool isCorrectAnswer;
   @HiveField(2, defaultValue: [])
-  List? synonyms;
+  List imagesUrl;
   @HiveField(3, defaultValue: [])
-  List? examples;
-  @HiveField(4, defaultValue: [])
-  List? translates;
-  @HiveField(5, defaultValue: [])
-  List? imagesUrl;
-  @HiveField(6, defaultValue: [])
-  List? totalList;
+  List totalList;
 
   AnswerModel({
     required this.word,
-    this.imagesUrl,
-    this.totalList,
+    required this.imagesUrl,
+    required this.totalList,
     this.isCorrectAnswer = false,
-    this.examples =  const [],
-    this.synonyms = const [],
-    this.translates = const [],
+
   });
 }

@@ -91,7 +91,10 @@ Widget _cachedImageWidget(
                 ),
               ),
           imageUrl: imageModel.url,
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
           progressIndicatorBuilder: (context, url, downloadProgress) {
             return Padding(
               padding: EdgeInsets.all(giveH(size: 37, mh: mh)),

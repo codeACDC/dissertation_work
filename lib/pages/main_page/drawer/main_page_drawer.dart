@@ -1,6 +1,8 @@
 import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/constants/methods/methods.dart';
 import 'package:dissertation_work/pages/achievement_page/achievement_page.dart';
+import 'package:dissertation_work/pages/main_page/drawer/exit_widget.dart';
+import 'package:dissertation_work/pages/start_page/start_page.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +15,9 @@ class MainPageDrawer extends StatelessWidget {
 
   final List<DrawerListTileModel> tileModelList = const [
     DrawerListTileModel(
-      title: 'Настройки',
-      leadingIcon: Icons.settings,
+      title: 'Главное меню',
+      leadingIcon: Icons.home,
+      routeId: StartPage.id,
     ),
     DrawerListTileModel(
       title: 'Достижения',
@@ -25,6 +28,11 @@ class MainPageDrawer extends StatelessWidget {
       title: 'Помощь',
       leadingIcon: Icons.help_outline,
     ),
+    DrawerListTileModel(
+      title: 'Выход',
+      leadingIcon: Icons.exit_to_app,
+      routeId: ExitWidget.id,
+    )
   ];
 
   @override
@@ -39,38 +47,35 @@ class MainPageDrawer extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: giveH(size: 10, mh: mh)),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: giveH(size: 17, mh: mh),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                  color: ConstColor.translationContainerBG,
+                  borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: ConstColor.translationText,
+                      size: giveH(size: 17, mh: mh),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: giveW(size: 30, mw: mw),
-                ),
-                flexTextWidget(
-                  text: 'Меню',
-                  fontSize: giveH(size: 20, mh: mh),
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ),
-          Container(
-            color: Colors.deepPurple,
-            width: mw,
-            height: giveH(size: 1, mh: mh),
-            margin: EdgeInsets.only(
-              bottom: giveH(size: 5, mh: mh),
+                  SizedBox(
+                    width: giveW(size: 30, mw: mw),
+                  ),
+                  flexTextWidget(
+                    text: 'Меню',
+                    fontSize: giveH(size: 20, mh: mh),
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
             ),
           ),
           ...tileModelList.map((e) => DrawerListTile(
@@ -104,26 +109,36 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String tempTitle = title;
+    if(title.length < 6){
+      tempTitle = title + ' ' * (9 - title.length);
+    }
     return Container(
       margin: EdgeInsets.all(giveH(size: 5, mh: mh)),
       child: ListTile(
+        tileColor: ConstColor.translationContainerBG,
         leading: Icon(
           leadingIcon,
-          color: Colors.white,
+          color: ConstColor.translationText,
         ),
         title: flexTextWidget(
-            text: title,
+            text: tempTitle,
             color: Colors.white,
             fontSize: giveH(size: 11, mh: mh)),
         contentPadding:
             EdgeInsets.symmetric(horizontal: giveH(size: 5, mh: mh)),
         shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.deepPurple),
+            // side: const BorderSide(color: Colors.deepPurple),
             borderRadius: BorderRadius.circular(giveH(size: 10, mh: mh))),
         onTap: () {
           if (routeId == '/') {
             Navigator.of(context).pop();
-          } else {
+          } else if (routeId == StartPage.id) {
+            Navigator.of(context).pushReplacementNamed(routeId);
+          } else if(routeId == ExitWidget.id) {
+            onBackButtonPressed(context);
+          }
+          else {
             Navigator.of(context).pushNamed(routeId);
           }
         },

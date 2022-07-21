@@ -4,6 +4,7 @@ import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
+import '../../pages/main_page/drawer/exit_widget.dart';
 import '../../pages/page_of_translation/translation_page.dart';
 import '../../widgets/models/answer_model.dart';
 import '../../widgets/models/letter_model.dart';
@@ -66,28 +67,43 @@ void addNewAnswerModel({
   required String keyWord,
   required List totalList,
   required List imagesUrl,
-  List exampleList = const [],
-  List synonymsList = const [],
-  List translationList = const [],
 }) {
   var answerBox = Hive.box(Constants.answerBox);
 
-  if (!answerBox.values.any((elem) => elem.word == keyWord)) {
-    answerBox.add(AnswerModel(
-      word: keyWord,
-      isCorrectAnswer: true,
-      examples: exampleList,
-      imagesUrl: imagesUrl,
-      synonyms: synonymsList,
-      translates: translationList,
-      totalList: totalList,
-    ));
+  var answerBoxValues = answerBox.values;
+  bool boxElemExist = !answerBoxValues.any((elem) => elem.word == keyWord);
+
+  print('Answer box elem don\'t exist? : ' + boxElemExist.toString());
+  AnswerModel answerModel = AnswerModel(
+    word: keyWord,
+    isCorrectAnswer: true,
+    imagesUrl: imagesUrl,
+    totalList: totalList,
+  );
+  if (boxElemExist) {
+    answerBox.add(answerModel);
+
+    //remove duplicated data
+    duplicatedDataRemover(answerBox);
+  } else {
+    //get index of current answer model according to index
+    var answerBoxList = answerBoxValues.toList();
+    int indexOfAnswerModel = answerBoxList.indexOf(
+        answerBoxValues.firstWhere((element) => element.word == keyWord));
+    debugPrint('index of answer model: ' + indexOfAnswerModel.toString());
+    //delete current answer model
+    answerBoxList.removeWhere((element) {
+      return element.word == keyWord;
+    });
+    //insert answer model with current index
+    answerBoxList.insert(indexOfAnswerModel, answerModel);
+    //delete all values
+    answerBox.deleteAll(answerBox.keys);
+    //add edited answer model list
+    answerBox.addAll(answerBoxList);
   }
   //Emergency delete
   // answerBox.deleteAll(answerBox.keys);
-
-  //remove duplicated data
-  duplicatedDataRemover(answerBox);
 }
 
 void duplicatedDataRemover(Box<dynamic> answerBox) {
@@ -115,8 +131,10 @@ bool isDataExist(
 void detectChanges() {
   //Open changes box
   var changesBox = Hive.box(Constants.saveChangeBox);
+  //Open fireBaseBox
+  var fireBaseBoxValues = Hive.box(Constants.fireBaseBox).values;
   //add new length of keyWords
-  changesBox.add(Constants.keyWords.length);
+  changesBox.add(fireBaseBoxValues.length);
   //check if length bigger than one
   if (changesBox.length > 1) {
     //create new list of values
@@ -150,21 +168,20 @@ String nextKeyWord({
 }) {
   //Open keyWordBox
   var keyWordBox = Hive.box(Constants.keyWordBox);
-
+  //Open fireBaseBox and get its values
+  List fireBaseBoxValues = Hive.box(Constants.fireBaseBox).values.toList();
   //if keyWordBox length bigger or equal to the keyWordList length clear keyWordBox
-  if (keyWordBox.length >= keyWordList.length) {
+  if (keyWordBox.length >= fireBaseBoxValues.length) {
     keyWordBox.deleteAll(keyWordBox.keys);
   }
 
   //get keyWord values
   List keyWordValues = keyWordBox.values.toList();
-  print(keyWordValues);
 
   //get list of data that doesn't contain in keyWordList
-  List<String> tempKeyWords =
-      keyWordList.where((element) => !keyWordValues.contains(element)).toList();
-
-  print(tempKeyWords);
+  List tempKeyWords = fireBaseBoxValues
+      .where((element) => !keyWordValues.contains(element))
+      .toList();
 
   //get first keyWord elem
   var firstKeyWord = tempKeyWords.first;
@@ -179,7 +196,7 @@ void addToKeyWordBoxWhenTrue({
   required bool? isAnswerCorrect,
   required String keyWord,
 }) {
-  if(isAnswerCorrect != null) {
+  if (isAnswerCorrect != null) {
     if (isAnswerCorrect) {
       //Open keyWord box
       var keyWordBox = Hive.box(Constants.keyWordBox);
@@ -203,7 +220,10 @@ void showCongratulation({
       () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(giveH(size: 10, mh: mh))),
+              borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(giveH(size: 10, mh: mh)),
+            topRight: Radius.circular(giveH(size: 10, mh: mh)),
+          )),
           content: Builder(builder: (context) {
             confettiController.play();
             return SizedBox(
@@ -230,4 +250,13 @@ void showCongratulation({
       },
     );
   }
+}
+
+Future<bool> onBackButtonPressed(BuildContext context) async {
+  bool? exitApp = await showDialog(
+      context: context,
+      builder: (context) {
+        return const ExitWidget();
+      });
+  return exitApp ?? false;
 }

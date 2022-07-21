@@ -1,25 +1,25 @@
-import 'package:dissertation_work/constants/constants.dart';
-import 'package:dissertation_work/constants/methods/methods.dart';
-import 'package:dissertation_work/pages/main_page/drawer/main_page_drawer.dart';
-import 'package:dissertation_work/widgets/widgets.dart';
+import 'package:dissertation_work/pages/start_page/start_page_body.dart';
 import 'package:flutter/material.dart';
 
-import '../main_page/main_page_body/main_page_body_view.dart';
+import '../../constants/constants.dart';
+import '../../constants/methods/methods.dart';
+import '../../widgets/widgets.dart';
+import '../main_page/drawer/main_page_drawer.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-  static const id = 'main_page';
+class StartPage extends StatelessWidget {
+  const StartPage({Key? key}) : super(key: key);
+  static const String id = 'start_page';
 
   @override
   Widget build(BuildContext context) {
     double mh = MediaQuery.of(context).size.height;
     double mw = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: ()=> onBackButtonPressed(context),
+      onWillPop: () => onBackButtonPressed(context),
       child: Scaffold(
         backgroundColor: ConstColor.blackBoard0C,
         appBar: AppBar(
-          shape:  RoundedRectangleBorder(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
               bottomRight: Radius.circular(giveH(size: 10, mh: mh)),
@@ -33,8 +33,7 @@ class MainPage extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        drawer: MainPageDrawer(mw: mw, mh: mh),
-        body: const SafeArea(child: MainPageBody()),
+        body: const StartPageBody(),
       ),
     );
   }
