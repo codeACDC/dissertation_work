@@ -96,12 +96,6 @@ class _MainPageBodyState extends State<MainPageBody> {
           ReplaceInherited.of(context).saveIndexArray = saveIndexArray;
           ReplaceInherited.of(context).correctAnswerModel = correctAnswerModel;
           if (ReplaceInherited.of(context).imagesUrl != null) {
-            addToKeyWordBoxWhenTrue(
-              isAnswerCorrect:
-                  ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
-              keyWord: tempKeyWord,
-            );
-
             showCongratulation(
                 keyWord: tempKeyWord,
                 imagesUrl: ReplaceInherited.of(context).imagesUrl!,

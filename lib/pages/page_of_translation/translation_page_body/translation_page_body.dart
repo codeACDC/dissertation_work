@@ -78,6 +78,9 @@ class TranslationPageBody extends StatelessWidget {
                 }
                 if (state is TranslatorLoaded) {
                   final List definitionList = state.loadedTranslation;
+                  addToKeyWordBoxWhenTrue(
+                    keyWord: keyWord,
+                  );
                   addNewAnswerModel(keyWord: keyWord,
                       imagesUrl: imagesUrl,
                       totalList: definitionList

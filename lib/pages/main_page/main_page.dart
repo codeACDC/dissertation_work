@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     isMute = soundVolumeStateBox.isNotEmpty
         ? soundVolumeStateBox.values.last
-        : false;
+        : true;
     super.initState();
   }
 
@@ -41,6 +41,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     double mh = MediaQuery.of(context).size.height;
     double mw = MediaQuery.of(context).size.width;
+    doSoundMute(audioPlayer: audioPlayer, isMute: isMute);
 
     return WillPopScope(
       onWillPop: () => onBackButtonPressed(context),
@@ -67,7 +68,6 @@ class _MainPageState extends State<MainPage> {
                     isMute = !isMute;
                   });
                   soundVolumeStateBox.add(isMute);
-                  doSoundMute(audioPlayer: audioPlayer, isMute: isMute);
                 },
                 icon: Icon(
                   isMute ? Icons.volume_mute : Icons.volume_down,

@@ -89,8 +89,9 @@ void addNewAnswerModel({
   } else {
     //get index of current answer model according to index
     var answerBoxList = answerBoxValues.toList();
-    int indexOfAnswerModel = answerBoxList.indexOf(
-        answerBoxValues.firstWhere((element) => element.word == keyWord));
+    int indexOfAnswerModel = answerBoxList.indexOf(answerBoxValues.firstWhere(
+        (element) => element.word == keyWord,
+        orElse: () => answerModel));
     debugPrint('index of answer model: ' + indexOfAnswerModel.toString());
     //delete current answer model
     answerBoxList.removeWhere((element) {
@@ -187,21 +188,18 @@ String nextKeyWord() {
 
   // Emergency delete
   // keyWordBox.deleteAll(keyWordBox.keys);
+  // var answerBox = Hive.box(Constants.answerBox);
+  // answerBox.deleteAll(answerBox.keys);
 
   return firstKeyWord;
 }
 
 void addToKeyWordBoxWhenTrue({
-  required bool? isAnswerCorrect,
   required String keyWord,
 }) {
-  if (isAnswerCorrect != null) {
-    if (isAnswerCorrect) {
-      //Open keyWord box
-      var keyWordBox = Hive.box(Constants.keyWordBox);
-      keyWordBox.add(keyWord);
-    }
-  }
+  //Open keyWord box
+  var keyWordBox = Hive.box(Constants.keyWordBox);
+  keyWordBox.add(keyWord);
 }
 
 void showCongratulation({
@@ -251,7 +249,8 @@ void showCongratulation({
   }
 }
 
-Future<bool> onBackButtonPressed(BuildContext context) async {
+Future<bool> onBackButtonPressed(BuildContext context,
+    {List? translations}) async {
   bool? exitApp = await showDialog(
       context: context,
       builder: (context) {
@@ -266,12 +265,11 @@ Future<void> playSound(
     if (isCorrectAnswer) {
       await audioPlayer
           .setAsset(Constants.soundEffectsMap['correctSoundPath']!);
-      await audioPlayer.play();
     } else {
       await audioPlayer
           .setAsset(Constants.soundEffectsMap['inCorrectSoundPath']!);
-      await audioPlayer.play();
     }
+    await audioPlayer.play();
   }
 }
 

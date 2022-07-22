@@ -63,6 +63,7 @@ class PreviewHeroWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                   imageBuilder: (context, provider) {
                     return Container(
+                      height: giveH(size: 40, mh: mh),
                         decoration: BoxDecoration(
                             color: ConstColor.translationContainerBG,
                             // border: Border.all(color: ConstColor.translationText),

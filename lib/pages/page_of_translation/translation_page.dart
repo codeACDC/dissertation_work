@@ -24,11 +24,14 @@ class _TranslationPageState extends State<TranslationPage> {
 
     final keyWord = tempKeyWord.toString();
     double mh = MediaQuery.of(context).size.height;
+    // double mw = MediaQuery.of(context).size.width;
     return TranslationInherited(
-      child: Builder(
-        builder: (context) {
-          TranslationInherited.of(context).translation = null;
-          return Scaffold(
+      child: Builder(builder: (context) {
+        TranslationInherited.of(context).translation = null;
+        return WillPopScope(
+          onWillPop: () => onBackButtonPressed(context,
+              translations: TranslationInherited.of(context).translation),
+          child: Scaffold(
             appBar: AppBar(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -50,16 +53,14 @@ class _TranslationPageState extends State<TranslationPage> {
               ),
               backgroundColor: Colors.amber,
               onPressed: () {
-          var translations = TranslationInherited.of(context).translation;
-
-                if (translations != null) {
+                if (TranslationInherited.of(context).translation != null) {
                   Navigator.of(context).pushReplacementNamed(MainPage.id);
                 }
               },
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
