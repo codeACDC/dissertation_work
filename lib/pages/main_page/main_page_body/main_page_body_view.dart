@@ -6,6 +6,7 @@ import 'package:dissertation_work/pages/main_page/main_page_body/grid_of_image.d
 import 'package:dissertation_work/widgets/widgets.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../../constants/constants.dart';
 import '../../../constants/methods/methods.dart';
@@ -16,7 +17,12 @@ import '../../../widgets/random_letter_list_widget.dart';
 import '../../../widgets/replace_inherited_widget.dart';
 
 class MainPageBody extends StatefulWidget {
-  const MainPageBody({Key? key}) : super(key: key);
+  final AudioPlayer audioPlayer;
+
+  const MainPageBody({
+    Key? key,
+    required this.audioPlayer,
+  }) : super(key: key);
 
   @override
   State<MainPageBody> createState() => _MainPageBodyState();
@@ -40,36 +46,38 @@ class _MainPageBodyState extends State<MainPageBody> {
     detectChanges();
 
     //Preparation data
-    tempKeyWord = nextKeyWord(keyWordList: Constants.keyWords);
+    tempKeyWord = nextKeyWord();
 
-    print(tempKeyWord);
+    debugPrint('Key word: ' + tempKeyWord);
     correctAnswerModel =
         CorrectAnswerModel(correctAnswer: tempKeyWord, isCorrect: null);
     List<String> tempRandomLetterList = tempKeyWord.toUpperCase().split('');
 
     tempRandomLetterList.addAll(Constants.alphabetList.where((elem) =>
-        !tempRandomLetterList.contains(elem) &&
+    !tempRandomLetterList.contains(elem) &&
         tempRandomLetterList.length < 12));
     tempRandomLetterList.shuffle();
 
     List<String> tempEmptyStringList =
-        List<String>.filled(tempKeyWord.length, '');
+    List<String>.filled(tempKeyWord.length, '');
 
     //Preparation LetterClass List
     saveIndexArray = {};
 
     randomLetterList = tempRandomLetterList
-        .map((e) => LetterModel(
-              letter: e,
-              id: UniqueKey().toString(),
-            ))
+        .map((e) =>
+        LetterModel(
+          letter: e,
+          id: UniqueKey().toString(),
+        ))
         .toList();
 
     emptyStringList = tempEmptyStringList
-        .map((e) => LetterModel(
-              letter: e,
-              id: UniqueKey().toString(),
-            ))
+        .map((e) =>
+        LetterModel(
+          letter: e,
+          id: UniqueKey().toString(),
+        ))
         .toList();
     super.initState();
   }
@@ -104,6 +112,11 @@ class _MainPageBodyState extends State<MainPageBody> {
                 mh: mh,
                 mw: mw);
           }
+          playSound(
+            audioPlayer: widget.audioPlayer,
+            isCorrectAnswer:
+                ReplaceInherited.of(context).correctAnswerModel!.isCorrect,
+          );
 
           return Container(
             height: mh,

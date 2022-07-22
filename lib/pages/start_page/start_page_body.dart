@@ -1,5 +1,7 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dissertation_work/constants/methods/methods.dart';
 import 'package:dissertation_work/pages/achievement_page/achievement_page.dart';
+import 'package:dissertation_work/pages/hint_page/hint_page.dart';
 import 'package:dissertation_work/pages/main_page/main_page.dart';
 import 'package:dissertation_work/pages/start_page/start_page_widgets/start_page_button.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
@@ -21,8 +23,12 @@ class StartPageBody extends StatelessWidget {
         title: 'Достижения',
         route: AchievementPage.id,
         icon: Icons.system_security_update_good_rounded),
-    StartPageButtonModel(title: 'Помощь', route: '/', icon: Icons.help_outline),
-    StartPageButtonModel(title: 'Выход', route: ExitWidget.id, icon: Icons.exit_to_app),
+    StartPageButtonModel(
+        title: 'Подсказки',
+        route: HintPage.id,
+        icon: Icons.help_outline),
+    StartPageButtonModel(
+        title: 'Выход', route: ExitWidget.id, icon: Icons.exit_to_app),
   ];
 
   @override
@@ -46,73 +52,81 @@ class StartPageBody extends StatelessWidget {
               SizedBox(
                 height: giveH(size: 60, mh: mh),
               ),
-              flexTextWidget(
-                  text: 'Угадай слово!',
-                  fontSize: giveH(size: 25, mh: mh),
-                  color: ConstColor.translationText,
-                  fontWeight: FontWeight.w600),
+              AnimatedTextKit(totalRepeatCount: 1, animatedTexts: [
+                WavyAnimatedText(
+                  'Угадай слово!',
+                  speed: const Duration(milliseconds: 150),
+                  textStyle: TextStyle(
+                      fontSize: giveH(size: 25, mh: mh),
+                      color: ConstColor.translationText,
+                      fontWeight: FontWeight.w600),
+                )
+              ]),
               SizedBox(
                 height: giveH(size: 40, mh: mh),
               ),
               BlocProvider<FirebaseFirestoreCubit>(
-                create: (context) => FirebaseFirestoreCubit()..loadDataFromFirebase(),
-                child: BlocBuilder<FirebaseFirestoreCubit, FirebaseFirestoreState>(
-                  buildWhen: (previousState, currentState) => previousState != currentState,
-                    builder: (context, state) {
-                  if (state is FirebaseFirestoreLoaded) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ...startButtonTitles.map((e) => StartPageButton(
-                              mh: mh,
-                              mw: mw,
-                              title: e.title,
-                              route: e.route,
-                              icon: e.icon,
-                            ))
-                      ],
-                    );
-                  }
-                  if (state is FirebaseFirestoreLoading) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.deepPurple[800],
-                      ),
-                    );
-                  }
-                  if (state is FirebaseFirestoreError) {
-                    return Center(
-                      child: MaterialButton(
-                        elevation: giveH(size: 3, mh: mh),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(giveH(size: 5, mh: mh)),
-                        ),
-                        onPressed: () {
-                          context
-                              .read<FirebaseFirestoreCubit>()
-                              .loadDataFromFirebase();
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.repeat,
-                              color: Colors.white,
-                            ),
-                            flexTextWidget(
-                                text: '  Повторить',
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400)
-                          ],
-                        ),
-                        color: Colors.deepPurple[800],
-                      ),
-                    );
-                  }
-                  return Container();
-                }),
+                create: (context) =>
+                    FirebaseFirestoreCubit()..loadDataFromFirebase(),
+                child:
+                    BlocBuilder<FirebaseFirestoreCubit, FirebaseFirestoreState>(
+                        buildWhen: (previousState, currentState) =>
+                            previousState != currentState,
+                        builder: (context, state) {
+                          if (state is FirebaseFirestoreLoaded) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ...startButtonTitles.map((e) => StartPageButton(
+                                      mh: mh,
+                                      mw: mw,
+                                      title: e.title,
+                                      route: e.route,
+                                      icon: e.icon,
+                                    ))
+                              ],
+                            );
+                          }
+                          if (state is FirebaseFirestoreLoading) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.deepPurple[800],
+                              ),
+                            );
+                          }
+                          if (state is FirebaseFirestoreError) {
+                            return Center(
+                              child: MaterialButton(
+                                elevation: giveH(size: 3, mh: mh),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      giveH(size: 5, mh: mh)),
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<FirebaseFirestoreCubit>()
+                                      .loadDataFromFirebase();
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.repeat,
+                                      color: Colors.white,
+                                    ),
+                                    flexTextWidget(
+                                        text: '  Повторить',
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400)
+                                  ],
+                                ),
+                                color: Colors.deepPurple[800],
+                              ),
+                            );
+                          }
+                          return Container();
+                        }),
               )
             ]),
           ),

@@ -3,6 +3,7 @@ import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../../pages/main_page/drawer/exit_widget.dart';
 import '../../pages/page_of_translation/translation_page.dart';
@@ -73,7 +74,7 @@ void addNewAnswerModel({
   var answerBoxValues = answerBox.values;
   bool boxElemExist = !answerBoxValues.any((elem) => elem.word == keyWord);
 
-  print('Answer box elem don\'t exist? : ' + boxElemExist.toString());
+  debugPrint('Answer box elem don\'t exist? : ' + boxElemExist.toString());
   AnswerModel answerModel = AnswerModel(
     word: keyWord,
     isCorrectAnswer: true,
@@ -163,9 +164,7 @@ void detectChanges() {
   }
 }
 
-String nextKeyWord({
-  required List<String> keyWordList,
-}) {
+String nextKeyWord() {
   //Open keyWordBox
   var keyWordBox = Hive.box(Constants.keyWordBox);
   //Open fireBaseBox and get its values
@@ -259,4 +258,24 @@ Future<bool> onBackButtonPressed(BuildContext context) async {
         return const ExitWidget();
       });
   return exitApp ?? false;
+}
+
+Future<void> playSound(
+    {required AudioPlayer audioPlayer, required bool? isCorrectAnswer}) async {
+  if (isCorrectAnswer != null) {
+    if (isCorrectAnswer) {
+      await audioPlayer
+          .setAsset(Constants.soundEffectsMap['correctSoundPath']!);
+      await audioPlayer.play();
+    } else {
+      await audioPlayer
+          .setAsset(Constants.soundEffectsMap['inCorrectSoundPath']!);
+      await audioPlayer.play();
+    }
+  }
+}
+
+void doSoundMute(
+    {required AudioPlayer audioPlayer, required bool isMute}) async {
+  isMute ? await audioPlayer.setVolume(0.0) : await audioPlayer.setVolume(1);
 }

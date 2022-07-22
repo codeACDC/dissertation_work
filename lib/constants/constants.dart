@@ -2,19 +2,47 @@ import 'package:flutter/cupertino.dart';
 
 class Constants {
   static const String pixApiKey = '26135823-6805a1b7eb2b4f15fe639b6de';
-  static const String yandexDictApiKey = 'dict.1.1.20220531T093521Z.4df76d6ce4cfca57.45cf38f86dfee013c2e1bb523380c2aa8c436798';
-  static const List<String> alphabetList = ['A', 'B', 'C', 'D', 'E', 'F', 'G',
-    'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U','V',
-    'W', 'X', 'Y', 'Z'
+  static const String yandexDictApiKey =
+      'dict.1.1.20220531T093521Z.4df76d6ce4cfca57.45cf38f86dfee013c2e1bb523380c2aa8c436798';
+  static const List<String> alphabetList = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z'
   ];
-  static const List<String> keyWords = ['dog', 'cat', 'fish', 'monkey','sheep','goat','clock'];
+  static const Map<String, String> soundEffectsMap = {
+    'correctSoundPath': 'lib/sound_effects/correct_answer.mp3',
+    'inCorrectSoundPath': 'lib/sound_effects/wrong_answer.mp3',
+  };
   static const answerBox = 'answer_box';
   static const keyWordBox = 'key_word_box';
   static const saveChangeBox = 'save_change_box';
   static const fireBaseBox = 'fire_base_box';
   static const firebaseCollectionName = 'keyWords';
   static const firebaseKeyWordDocName = 'nouns';
-
+  static const soundVolumeStateBox = 'sound_volume_state_box';
 }
 
 class ConstColor {

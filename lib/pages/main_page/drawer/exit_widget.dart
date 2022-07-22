@@ -39,12 +39,14 @@ static const String id = 'exit';
             var changesBox = Hive.box(Constants.saveChangeBox);
             var firebaseBox = Hive.box(Constants.fireBaseBox);
             var answerBox = Hive.box(Constants.answerBox);
+            var soundVolumeStateBox = Hive.box(Constants.soundVolumeStateBox);
 
             List<Box> boxList = [
               keyWordBox,
               changesBox,
               firebaseBox,
               answerBox,
+              soundVolumeStateBox,
             ];
 
             //And check isOpen after this action close all boxes

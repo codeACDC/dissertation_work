@@ -1,6 +1,7 @@
 import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/constants/methods/methods.dart';
 import 'package:dissertation_work/pages/achievement_page/achievement_page.dart';
+import 'package:dissertation_work/pages/hint_page/hint_page.dart';
 import 'package:dissertation_work/pages/main_page/drawer/exit_widget.dart';
 import 'package:dissertation_work/pages/start_page/start_page.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
@@ -25,8 +26,9 @@ class MainPageDrawer extends StatelessWidget {
       routeId: AchievementPage.id,
     ),
     DrawerListTileModel(
-      title: 'Помощь',
+      title: 'Подсказки',
       leadingIcon: Icons.help_outline,
+      routeId: HintPage.id,
     ),
     DrawerListTileModel(
       title: 'Выход',
@@ -110,7 +112,7 @@ class DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String tempTitle = title;
-    if(title.length < 6){
+    if (title.length < 6) {
       tempTitle = title + ' ' * (9 - title.length);
     }
     return Container(
@@ -135,10 +137,9 @@ class DrawerListTile extends StatelessWidget {
             Navigator.of(context).pop();
           } else if (routeId == StartPage.id) {
             Navigator.of(context).pushReplacementNamed(routeId);
-          } else if(routeId == ExitWidget.id) {
+          } else if (routeId == ExitWidget.id) {
             onBackButtonPressed(context);
-          }
-          else {
+          } else {
             Navigator.of(context).pushNamed(routeId);
           }
         },
