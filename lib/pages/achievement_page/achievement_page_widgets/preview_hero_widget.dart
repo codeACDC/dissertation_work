@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dissertation_work/constants/constants.dart';
@@ -64,7 +63,6 @@ class PreviewHeroWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                   imageBuilder: (context, provider) {
                     return Container(
-                        height: giveH(size: 50, mh: mh),
                         decoration: BoxDecoration(
                             color: ConstColor.translationContainerBG,
                             // border: Border.all(color: ConstColor.translationText),

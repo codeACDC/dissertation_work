@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 import '../../widgets/translations_inherited.dart';
 import 'translation_page_body/translation_page_body.dart';
 
-class TranslationPage extends StatelessWidget {
+class TranslationPage extends StatefulWidget {
   const TranslationPage({
     Key? key,
   }) : super(key: key);
   static const id = 'translation_page';
+
+  @override
+  State<TranslationPage> createState() => _TranslationPageState();
+}
+
+class _TranslationPageState extends State<TranslationPage> {
   @override
   Widget build(BuildContext context) {
     final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;

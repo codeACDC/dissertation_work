@@ -70,7 +70,7 @@ Widget _cachedImageWidget(
       alignment: alignment,
       child: CachedNetworkImage(
           imageBuilder: (context, provider) => AnimatedContainer(
-                width: imageModel.isTap ? freeMw : giveH(size: 106, mh: mh),
+                width: imageModel.isTap ? freeMw : giveW(size: 106, mw: mw),
                 height: imageModel.isTap ? freeMh : giveH(size: 100, mh: mh),
                 curve: Curves.fastLinearToSlowEaseIn,
                 duration: const Duration(milliseconds: 300),
