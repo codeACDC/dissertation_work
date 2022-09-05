@@ -86,7 +86,7 @@ void addNewAnswerModel({
 
     //remove duplicated data
     duplicatedDataRemover(answerBox);
-  } else { 
+  } else {
     //get index of current answer model according to index
     var answerBoxList = answerBoxValues.toList();
     int indexOfAnswerModel = answerBoxList.indexOf(answerBoxValues.firstWhere(
