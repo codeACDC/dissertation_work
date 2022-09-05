@@ -1,4 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:ffi';
+import 'dart:typed_data';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dissertation_work/pages/achievement_page/achievement_page_widgets/carousel_indicator_widget.dart';
 import 'package:dissertation_work/pages/page_of_translation/translation_page_widgets/translation_widget.dart';
@@ -79,64 +81,59 @@ class _MainHeroPageState extends State<MainHeroPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Hero(
-                        tag: widget.keyWord,
-                        child: CarouselSlider.builder(
-                            itemCount: widget.imagesUrl.length,
-                            itemBuilder: (context, index, page) {
-                              return CachedNetworkImage(
-                                imageUrl: widget.imagesUrl.elementAt(index),
-                                errorWidget: (context, url, _) => const Icon(
-                                  Icons.error,
-                                  color: Colors.red,
+                      widget.imagesUrl.isEmpty
+                          ? Container()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Hero(
+                                  tag: widget.keyWord,
+                                  child: CarouselSlider.builder(
+                                      itemCount: widget.imagesUrl.length,
+                                      itemBuilder: (context, index, page) {
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: giveH(size: 5, mh: mh)),
+                                          height: giveH(size: 50, mh: freeMh),
+                                          width: giveW(size: 270, mw: mw),
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
+                                                  spreadRadius:
+                                                      giveH(size: 2, mh: mh),
+                                                  blurRadius:
+                                                      giveH(size: 3, mh: mh),
+                                                  offset:
+                                                      Offset.fromDirection(-3)),
+                                            ],
+                                            borderRadius: BorderRadius.circular(
+                                                giveH(size: 10, mh: freeMh)),
+                                          ),
+                                          child: Image.memory(
+                                              Uint8List.fromList(widget
+                                                  .imagesUrl
+                                                  .elementAt(index)),
+                                              fit: BoxFit.cover),
+                                        );
+                                      },
+                                      options: CarouselOptions(
+                                          enlargeCenterPage: true,
+                                          onPageChanged: (index, _) {
+                                            super.setState(() {
+                                              currentPhotoIndex = index;
+                                            });
+                                          })),
                                 ),
-                                progressIndicatorBuilder:
-                                    (context, url, progress) => Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.deepPurple[800],
-                                  ),
+                                CarouselIndicatorWidget(
+                                  mh: mh,
+                                  mw: mw,
+                                  totalQuantityOfPhoto: widget.imagesUrl.length,
+                                  currentPhotoIndex: currentPhotoIndex,
                                 ),
-                                imageBuilder: (context, provider) {
-                                  return Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: giveH(size: 5, mh: mh)),
-                                      height: giveH(size: 50, mh: freeMh),
-                                      width: giveW(size: 270, mw: mw),
-                                      decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                                spreadRadius:
-                                                    giveH(size: 2, mh: mh),
-                                                blurRadius:
-                                                    giveH(size: 3, mh: mh),
-                                                offset:
-                                                    Offset.fromDirection(-3)),
-                                          ],
-                                          borderRadius: BorderRadius.circular(
-                                              giveH(size: 10, mh: freeMh)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: provider,
-                                          )));
-                                },
-                              );
-                            },
-                            options: CarouselOptions(
-                                enlargeCenterPage: true,
-                                onPageChanged: (index, _) {
-                                  super.setState(() {
-                                    currentPhotoIndex = index;
-                                  });
-                                })),
-                      ),
-                      CarouselIndicatorWidget(
-                        mh: mh,
-                        mw: mw,
-                        totalQuantityOfPhoto: widget.imagesUrl.length,
-                        currentPhotoIndex: currentPhotoIndex,
-                      ),
+                              ],
+                            ),
                       ...widget.totalList.map((e) {
                         //Make from _InternalLinkedHashMap<dynamic, dynamic> to Map<String, dynamic>
                         final Map<String, dynamic> tempElem =

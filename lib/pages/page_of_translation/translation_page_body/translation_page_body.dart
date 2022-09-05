@@ -8,15 +8,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants/constants.dart';
 import '../../../widgets/translations_inherited.dart';
 
-class TranslationPageBody extends StatelessWidget {
+class TranslationPageBody extends StatefulWidget {
   final String keyWord;
   final List<String> imagesUrl;
 
-  const TranslationPageBody({
+  TranslationPageBody({
     Key? key,
     required this.keyWord,
     required this.imagesUrl,
   }) : super(key: key);
+
+  @override
+  State<TranslationPageBody> createState() => _TranslationPageBodyState();
+}
+
+class _TranslationPageBodyState extends State<TranslationPageBody> {
+  late List binaryListOfImages;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +46,7 @@ class TranslationPageBody extends StatelessWidget {
                 end: Alignment.bottomCenter)),
         child: BlocProvider<TranslatorCubit>(
           create: (context) =>
-              TranslatorCubit(search: keyWord)..translationParser(),
+              TranslatorCubit(search: widget.keyWord)..translationParser(),
           child: BlocBuilder<TranslatorCubit, TranslatorState>(
               buildWhen: (previousState, currentState) =>
                   previousState != currentState,
@@ -44,12 +56,11 @@ class TranslationPageBody extends StatelessWidget {
                     child: MaterialButton(
                       elevation: giveH(size: 3, mh: mh),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            giveH(size: 5, mh: mh)),
+                        borderRadius:
+                            BorderRadius.circular(giveH(size: 5, mh: mh)),
                       ),
                       onPressed: () {
-                        context
-                            .read<TranslatorCubit>().translationParser();
+                        context.read<TranslatorCubit>().translationParser();
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -77,15 +88,30 @@ class TranslationPageBody extends StatelessWidget {
                   );
                 }
                 if (state is TranslatorLoaded) {
+                  Future.delayed(Duration.zero, () {
+                    super.setState(() => () async {
+                      binaryListOfImages =
+                      await toBinaryDataConverter(imagesUrl: widget.imagesUrl);
+                    });
+                  });
+                  TranslationInherited.of(context).binaryListOfImages = binaryListOfImages;
                   final List definitionList = state.loadedTranslation;
-                  addToKeyWordBoxWhenTrue(
-                    keyWord: keyWord,
-                  );
-                  addNewAnswerModel(keyWord: keyWord,
-                      imagesUrl: imagesUrl,
-                      totalList: definitionList
-                  );
-                  TranslationInherited.of(context).translation = state.loadedTranslation;
+
+                  bool isNotNull =
+                      TranslationInherited.of(context).binaryListOfImages !=
+                          null;
+                  print(TranslationInherited.of(context).binaryListOfImages);
+                  debugPrint('is not null: ' + isNotNull.toString());
+                  if (isNotNull) {
+                    addToKeyWordBoxWhenTrue(
+                      keyWord: widget.keyWord,
+                    );
+                    addNewAnswerModel(
+                        keyWord: widget.keyWord,
+                        imagesUrl: TranslationInherited.of(context)
+                            .binaryListOfImages!,
+                        totalList: definitionList);
+                  }
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(

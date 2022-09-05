@@ -3,6 +3,7 @@ import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../pages/main_page/drawer/exit_widget.dart';
@@ -59,8 +60,22 @@ Color answerColor(bool? answer) {
     return Colors.white.withOpacity(0.0);
   } else {
     Color tempColor =
-        answer ? Colors.green.withOpacity(0.6) : Colors.red.withOpacity(0.6);
+    answer ? Colors.green.withOpacity(0.6) : Colors.red.withOpacity(0.6);
     return tempColor;
+  }
+}
+
+Future<List> toBinaryDataConverter ({required List imagesUrl}) async {
+  try {
+    List binaryListOfImages = [];
+    for (int i = 0; i < imagesUrl.length; i++) {
+      Response response =  await get(Uri.parse(imagesUrl[i]));
+      binaryListOfImages.add(response.bodyBytes);
+    }
+    return binaryListOfImages;
+  }
+  catch (e) {
+    return [];
   }
 }
 
@@ -90,7 +105,7 @@ void addNewAnswerModel({
     //get index of current answer model according to index
     var answerBoxList = answerBoxValues.toList();
     int indexOfAnswerModel = answerBoxList.indexOf(answerBoxValues.firstWhere(
-        (element) => element.word == keyWord,
+            (element) => element.word == keyWord,
         orElse: () => answerModel));
     debugPrint('index of answer model: ' + indexOfAnswerModel.toString());
     //delete current answer model
@@ -134,7 +149,9 @@ void detectChanges() {
   //Open changes box
   var changesBox = Hive.box(Constants.saveChangeBox);
   //Open fireBaseBox
-  var fireBaseBoxValues = Hive.box(Constants.fireBaseBox).values;
+  var fireBaseBoxValues = Hive
+      .box(Constants.fireBaseBox)
+      .values;
   //add new length of keyWords
   changesBox.add(fireBaseBoxValues.length);
   //check if length bigger than one
@@ -169,7 +186,10 @@ String nextKeyWord() {
   //Open keyWordBox
   var keyWordBox = Hive.box(Constants.keyWordBox);
   //Open fireBaseBox and get its values
-  List fireBaseBoxValues = Hive.box(Constants.fireBaseBox).values.toList();
+  List fireBaseBoxValues = Hive
+      .box(Constants.fireBaseBox)
+      .values
+      .toList();
   //if keyWordBox length bigger or equal to the keyWordList length clear keyWordBox
   if (keyWordBox.length >= fireBaseBoxValues.length) {
     keyWordBox.deleteAll(keyWordBox.keys);
@@ -214,13 +234,13 @@ void showCongratulation({
   if (isCorrect == true) {
     Future.delayed(
       Duration.zero,
-      () {
+          () {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(giveH(size: 10, mh: mh)),
-            topRight: Radius.circular(giveH(size: 10, mh: mh)),
-          )),
+                topLeft: Radius.circular(giveH(size: 10, mh: mh)),
+                topRight: Radius.circular(giveH(size: 10, mh: mh)),
+              )),
           content: Builder(builder: (context) {
             confettiController.play();
             return SizedBox(
@@ -233,7 +253,7 @@ void showCongratulation({
           onVisible: () {
             Future.delayed(
               const Duration(milliseconds: 2800),
-              () {
+                  () {
                 Navigator.of(context).pushReplacementNamed(TranslationPage.id,
                     arguments: [keyWord, imagesUrl]);
               },

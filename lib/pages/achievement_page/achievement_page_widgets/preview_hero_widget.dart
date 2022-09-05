@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dissertation_work/constants/constants.dart';
@@ -58,33 +59,22 @@ class PreviewHeroWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //aspect ratio of image
-                CachedNetworkImage(
-                  imageUrl: imagesUrl.first,
-                  fit: BoxFit.cover,
-                  imageBuilder: (context, provider) {
-                    return Container(
-                      height: giveH(size: 40, mh: mh),
-                        decoration: BoxDecoration(
-                            color: ConstColor.translationContainerBG,
-                            // border: Border.all(color: ConstColor.translationText),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(giveH(size: 10, mh: mh)),
-                              topRight:
-                                  Radius.circular(giveH(size: 10, mh: mh)),
-                            ),
-                            image: DecorationImage(
-                                image: provider, fit: BoxFit.cover)));
-                  },
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
-                    color: Colors.red,
+                Container(
+                  height: giveH(size: 40, mh: mh),
+                  decoration: BoxDecoration(
+                    color: ConstColor.translationContainerBG,
+                    // border: Border.all(color: ConstColor.translationText),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(giveH(size: 10, mh: mh)),
+                      topRight: Radius.circular(giveH(size: 10, mh: mh)),
+                    ),
                   ),
-                  progressIndicatorBuilder: (context, url, progress) => Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.deepPurple[800],
-                    value: progress.progress,
-                  )),
+                  child: Image.memory(
+                    Uint8List.fromList(imagesUrl.elementAt(0)),
+                    fit: BoxFit.cover,
+                  ),
                 ),
+
                 Padding(
                   padding: EdgeInsets.only(top: giveH(size: 3, mh: mh)),
                   child: flexTextWidget(

@@ -27,10 +27,9 @@ class _TranslationPageState extends State<TranslationPage> {
     // double mw = MediaQuery.of(context).size.width;
     return TranslationInherited(
       child: Builder(builder: (context) {
-        TranslationInherited.of(context).translation = null;
+        TranslationInherited.of(context).binaryListOfImages = null;
         return WillPopScope(
-          onWillPop: () => onBackButtonPressed(context,
-              translations: TranslationInherited.of(context).translation),
+          onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(
             appBar: AppBar(
               shape: RoundedRectangleBorder(
@@ -53,7 +52,8 @@ class _TranslationPageState extends State<TranslationPage> {
               ),
               backgroundColor: Colors.amber,
               onPressed: () {
-                if (TranslationInherited.of(context).translation != null) {
+                if (TranslationInherited.of(context).binaryListOfImages !=
+                    null) {
                   Navigator.of(context).pushReplacementNamed(MainPage.id);
                 }
               },
