@@ -96,6 +96,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                   });
                   TranslationInherited.of(context).binaryListOfImages = binaryListOfImages;
                   final List definitionList = state.loadedTranslation;
+                  const String str = '';
 
                   bool isNotNull =
                       TranslationInherited.of(context).binaryListOfImages !=
