@@ -19,25 +19,17 @@ class TranslationPage extends StatefulWidget {
 class _TranslationPageState extends State<TranslationPage> {
   @override
   Widget build(BuildContext context) {
-    final List tempArgs = ModalRoute
-        .of(context)
-        ?.settings
-        .arguments as List;
+    final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
     final String tempKeyWord = tempArgs[0];
     final List<String> tempImagesUrl = tempArgs[1];
 
     final keyWord = tempKeyWord.toString();
-    double mh = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double mh = MediaQuery.of(context).size.height;
     // double mw = MediaQuery.of(context).size.width;
     binaryListReceiver();
     return TranslationInherited(
       child: Builder(builder: (context) {
-        TranslationInherited
-            .of(context)
-            .binaryListOfImages = null;
+        TranslationInherited.of(context).binaryListOfImages = null;
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(
@@ -47,8 +39,7 @@ class _TranslationPageState extends State<TranslationPage> {
                       bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
                       bottomRight: Radius.circular(giveH(size: 10, mh: mh)))),
               title: Text(
-                  'Слово ${keyWord.replaceFirst(
-                      keyWord[0], keyWord[0].toUpperCase())}'),
+                  'Слово ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
               backgroundColor: Colors.deepPurple[800],
             ),
             body: SafeArea(
@@ -58,33 +49,24 @@ class _TranslationPageState extends State<TranslationPage> {
             floatingActionButton: FloatingActionButton(
                 backgroundColor: Colors.amber,
                 onPressed: () {
-                  if (TranslationInherited
-                      .of(context)
-                      .binaryListOfImages !=
+                  if (TranslationInherited.of(context).binaryListOfImages !=
                       null) {
                     Navigator.of(context).pushReplacementNamed(MainPage.id);
                   }
                 },
-                child: Builder(
-                  builder: (context) {
-                    if (widget.binaryListOfImages != null ) {
-                      if(widget.binaryListOfImages!.isNotEmpty) {
-                        return Icon(
+                child: StreamBuilder<List<dynamic>?>(
+                  stream: binaryListReceiver(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                      return Icon(
                         Icons.check,
-                        size: giveH(size: 25, mh: mh),
+                        color: Colors.black,
+                        size: giveH(size: 20, mh: mh),
+                      );
+                    } else {
+                      return const CircularProgressIndicator(
                         color: Colors.black,
                       );
-                      }
-                      else{
-                        return Icon(
-                          Icons.error_outline,
-                          size: giveH(size: 25, mh: mh),
-                          color: Colors.black,
-                        );
-                      }
-                    } else{
-                      return const CircularProgressIndicator(
-                          color: Colors.black);
                     }
                   },
                 )),
@@ -94,17 +76,16 @@ class _TranslationPageState extends State<TranslationPage> {
     );
   }
 
-  void binaryListReceiver() async{
+  Stream<List<dynamic>?> binaryListReceiver() async* {
     while (true) {
-      var tempBinaryListReceiver = TranslationInherited.of(context).binaryListOfImages;
-      if (tempBinaryListReceiver != null) {
-        super.setState(() {
-          widget.binaryListOfImages = tempBinaryListReceiver;
-        });
+      List<dynamic>? tempBinaryListReceiver =
+          TranslationInherited.of(context).binaryListOfImages;
+      var isNoNull = tempBinaryListReceiver != null;
+      print('is null?' + isNoNull.toString());
+      if (isNoNull) {
+        yield tempBinaryListReceiver;
         break;
       }
     }
   }
 }
-
-
