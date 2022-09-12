@@ -6,10 +6,11 @@ import '../../widgets/translations_inherited.dart';
 import 'translation_page_body/translation_page_body.dart';
 
 class TranslationPage extends StatefulWidget {
-  const TranslationPage({
+  TranslationPage({
     Key? key,
   }) : super(key: key);
   static const id = 'translation_page';
+  List<dynamic>? binaryListOfImages;
 
   @override
   State<TranslationPage> createState() => _TranslationPageState();
@@ -31,6 +32,7 @@ class _TranslationPageState extends State<TranslationPage> {
         .size
         .height;
     // double mw = MediaQuery.of(context).size.width;
+    binaryListReceiver();
     return TranslationInherited(
       child: Builder(builder: (context) {
         TranslationInherited
@@ -63,24 +65,26 @@ class _TranslationPageState extends State<TranslationPage> {
                     Navigator.of(context).pushReplacementNamed(MainPage.id);
                   }
                 },
-                child: StreamBuilder(
-                  stream: streamOfTranslationInheritedVariable(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Icon(
+                child: Builder(
+                  builder: (context) {
+                    if (widget.binaryListOfImages != null ) {
+                      if(widget.binaryListOfImages!.isNotEmpty) {
+                        return Icon(
                         Icons.check,
                         size: giveH(size: 25, mh: mh),
                         color: Colors.black,
                       );
-                    } else if (!snapshot.hasData) {
+                      }
+                      else{
+                        return Icon(
+                          Icons.error_outline,
+                          size: giveH(size: 25, mh: mh),
+                          color: Colors.black,
+                        );
+                      }
+                    } else{
                       return const CircularProgressIndicator(
                           color: Colors.black);
-                    } else {
-                      return Icon(
-                        Icons.error_outline,
-                        size: giveH(size: 25, mh: mh),
-                        color: Colors.black,
-                      );
                     }
                   },
                 )),
@@ -90,18 +94,15 @@ class _TranslationPageState extends State<TranslationPage> {
     );
   }
 
-  Stream<List<dynamic>?> streamOfTranslationInheritedVariable() async*{
-    var binaryListOfImages = TranslationInherited.of(context).binaryListOfImages;
-    try{
-      while (true) {
-        if (binaryListOfImages != null) {
-          yield binaryListOfImages;
-          break;
-        }
+  void binaryListReceiver() async{
+    while (true) {
+      var tempBinaryListReceiver = TranslationInherited.of(context).binaryListOfImages;
+      if (tempBinaryListReceiver != null) {
+        super.setState(() {
+          widget.binaryListOfImages = tempBinaryListReceiver;
+        });
+        break;
       }
-    }
-    catch(e) {
-      debugPrint(e.toString());
     }
   }
 }

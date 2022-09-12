@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       routes: {
         StartPage.id: (context) => const StartPage(),
         MainPage.id: (context) => const MainPage(),
-        TranslationPage.id: (context) => const TranslationPage(),
+        TranslationPage.id: (context) =>  TranslationPage(),
         AchievementPage.id: (context) => const AchievementPage(),
         HintPage.id: (context) => const HintPage(),
       },
