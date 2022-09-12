@@ -18,15 +18,16 @@ class TranslationPage extends StatefulWidget {
 }
 
 class _TranslationPageState extends State<TranslationPage> {
-  @override
   final ValueNotifier<List<dynamic>?> binaryListValueNotifier =
       ValueNotifier<List<dynamic>?>(null);
   late Timer timer;
   @override
   void dispose() {
     timer.cancel();
-    super.dispose();
+     super.dispose();
   }
+  @override
+
   Widget build(BuildContext context) {
     final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
     final String tempKeyWord = tempArgs[0];
@@ -42,8 +43,8 @@ class _TranslationPageState extends State<TranslationPage> {
                 if(tempBinaryListOfImages != null) {
                   binaryListValueNotifier.value = tempBinaryListOfImages;
                 }
-
               });
+
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(

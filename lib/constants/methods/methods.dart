@@ -89,7 +89,7 @@ void addNewAnswerModel({
   var answerBoxValues = answerBox.values;
   bool boxElemExist = !answerBoxValues.any((elem) => elem.word == keyWord);
 
-  debugPrint('Answer box elem don\'t exist? : ' + boxElemExist.toString());
+  debugPrint('Answer box elem don\'t exist? : $boxElemExist');
   AnswerModel answerModel = AnswerModel(
     word: keyWord,
     isCorrectAnswer: true,
@@ -107,7 +107,7 @@ void addNewAnswerModel({
     int indexOfAnswerModel = answerBoxList.indexOf(answerBoxValues.firstWhere(
             (element) => element.word == keyWord,
         orElse: () => answerModel));
-    debugPrint('index of answer model: ' + indexOfAnswerModel.toString());
+    debugPrint('index of answer model: $indexOfAnswerModel');
     //delete current answer model
     answerBoxList.removeWhere((element) {
       return element.word == keyWord;
@@ -122,7 +122,12 @@ void addNewAnswerModel({
   //Emergency delete
   // answerBox.deleteAll(answerBox.keys);
 }
-
+bool isAnswerModelImagesExist(String  keyWord) {
+  var answerBox = Hive.box(Constants.answerBox);
+  var answerBoxValues = answerBox.values;
+  bool isImagesExist = answerBoxValues.any((element) => element.imagesUrl.isNotEmpty && keyWord == element.word);
+  return isImagesExist;
+}
 void duplicatedDataRemover(Box<dynamic> answerBox) {
   List answerBoxValues = answerBox.values.toList();
   List<AnswerModel> answerModelList = [];
@@ -136,7 +141,7 @@ void duplicatedDataRemover(Box<dynamic> answerBox) {
     answerBox.addAll(answerModelList);
   }
   debugPrint(
-      'answer box elem\'s: ' + answerBoxValues.map((e) => e.word).toString());
+      'answer box elem\'s: ${answerBoxValues.map((e) => e.word)}');
 }
 
 bool isDataExist(

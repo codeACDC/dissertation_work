@@ -54,6 +54,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                       ),
                       onPressed: () {
                         context.read<TranslatorCubit>().translationParser();
+
                       },
                       color: Colors.deepPurple[800],
                       child: Row(
@@ -82,15 +83,13 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                 }
                 if (state is TranslatorLoaded) {
                   final List definitionList = state.loadedTranslation;
-
-                      toBinaryDataConverter(
+                  if(!isAnswerModelImagesExist(widget.keyWord)) {
+                    toBinaryDataConverter(
                           imagesUrl: widget.imagesUrl).then((value) {
                             TranslationInherited.of(context).binaryListOfImages = value;
                         bool isNotNull =
                             TranslationInherited.of(context).binaryListOfImages !=
                                 null;
-                        print(TranslationInherited.of(context).binaryListOfImages);
-                        debugPrint('is not null: $isNotNull');
 
                         if (isNotNull) {
                           addToKeyWordBoxWhenTrue(
@@ -103,6 +102,13 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                               totalList: definitionList);
                         }
                       });
+                  }
+                  else {
+                    addToKeyWordBoxWhenTrue(
+                      keyWord: widget.keyWord,
+                    );
+                    TranslationInherited.of(context).binaryListOfImages = [];
+                  }
 
 
                   return SingleChildScrollView(
