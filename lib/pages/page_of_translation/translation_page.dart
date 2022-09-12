@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dissertation_work/constants/methods/methods.dart';
 import 'package:dissertation_work/pages/main_page/main_page.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,6 @@ class TranslationPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
   static const id = 'translation_page';
-  List<dynamic>? binaryListOfImages;
 
   @override
   State<TranslationPage> createState() => _TranslationPageState();
@@ -18,6 +19,14 @@ class TranslationPage extends StatefulWidget {
 
 class _TranslationPageState extends State<TranslationPage> {
   @override
+  final ValueNotifier<List<dynamic>?> binaryListValueNotifier =
+      ValueNotifier<List<dynamic>?>(null);
+  late Timer timer;
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
     final String tempKeyWord = tempArgs[0];
@@ -26,10 +35,15 @@ class _TranslationPageState extends State<TranslationPage> {
     final keyWord = tempKeyWord.toString();
     double mh = MediaQuery.of(context).size.height;
     // double mw = MediaQuery.of(context).size.width;
-    binaryListReceiver();
     return TranslationInherited(
       child: Builder(builder: (context) {
-        TranslationInherited.of(context).binaryListOfImages = null;
+              timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+                var tempBinaryListOfImages = TranslationInherited.of(context).binaryListOfImages;
+                if(tempBinaryListOfImages != null) {
+                  binaryListValueNotifier.value = tempBinaryListOfImages;
+                }
+
+              });
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(
@@ -47,45 +61,33 @@ class _TranslationPageState extends State<TranslationPage> {
                     keyWord: keyWord, imagesUrl: tempImagesUrl)),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.amber,
-                onPressed: () {
-                  if (TranslationInherited.of(context).binaryListOfImages !=
-                      null) {
-                    Navigator.of(context).pushReplacementNamed(MainPage.id);
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                if (TranslationInherited.of(context).binaryListOfImages !=
+                    null) {
+                  Navigator.of(context).pushReplacementNamed(MainPage.id);
+                }
+              },
+              child: ValueListenableBuilder(
+                valueListenable: binaryListValueNotifier,
+                builder: (context, binaryListOfImages, _) {
+                  if (binaryListOfImages != null) {
+                    return Icon(
+                      Icons.check,
+                      color: Colors.black,
+                      size: giveH(size: 20, mh: mh),
+                    );
+                  } else {
+                    return const CircularProgressIndicator(
+                      color: Colors.black,
+                    );
                   }
                 },
-                child: StreamBuilder<List<dynamic>?>(
-                  stream: binaryListReceiver(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                      return Icon(
-                        Icons.check,
-                        color: Colors.black,
-                        size: giveH(size: 20, mh: mh),
-                      );
-                    } else {
-                      return const CircularProgressIndicator(
-                        color: Colors.black,
-                      );
-                    }
-                  },
-                )),
+              ),
+            ),
           ),
         );
       }),
     );
-  }
-
-  Stream<List<dynamic>?> binaryListReceiver() async* {
-    while (true) {
-      List<dynamic>? tempBinaryListReceiver =
-          TranslationInherited.of(context).binaryListOfImages;
-      var isNoNull = tempBinaryListReceiver != null;
-      print('is null?' + isNoNull.toString());
-      if (isNoNull) {
-        yield tempBinaryListReceiver;
-        break;
-      }
-    }
   }
 }
