@@ -23,13 +23,6 @@ class TranslationPageBody extends StatefulWidget {
 }
 
 class _TranslationPageBodyState extends State<TranslationPageBody> {
-  late List binaryListOfImages;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -62,6 +55,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                       onPressed: () {
                         context.read<TranslatorCubit>().translationParser();
                       },
+                      color: Colors.deepPurple[800],
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -76,7 +70,6 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                               fontWeight: FontWeight.w400)
                         ],
                       ),
-                      color: Colors.deepPurple[800],
                     ),
                   );
                 }
@@ -88,31 +81,30 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                   );
                 }
                 if (state is TranslatorLoaded) {
-                  Future.delayed(Duration.zero, () {
-                    super.setState(() => () async {
-                      binaryListOfImages =
-                      await toBinaryDataConverter(imagesUrl: widget.imagesUrl);
-                    });
-                  });
-                  TranslationInherited.of(context).binaryListOfImages = binaryListOfImages;
                   final List definitionList = state.loadedTranslation;
-                  const String str = '';
 
-                  bool isNotNull =
-                      TranslationInherited.of(context).binaryListOfImages !=
-                          null;
-                  print(TranslationInherited.of(context).binaryListOfImages);
-                  debugPrint('is not null: ' + isNotNull.toString());
-                  if (isNotNull) {
-                    addToKeyWordBoxWhenTrue(
-                      keyWord: widget.keyWord,
-                    );
-                    addNewAnswerModel(
-                        keyWord: widget.keyWord,
-                        imagesUrl: TranslationInherited.of(context)
-                            .binaryListOfImages!,
-                        totalList: definitionList);
-                  }
+                      toBinaryDataConverter(
+                          imagesUrl: widget.imagesUrl).then((value) {
+                            TranslationInherited.of(context).binaryListOfImages = value;
+                        bool isNotNull =
+                            TranslationInherited.of(context).binaryListOfImages !=
+                                null;
+                        print(TranslationInherited.of(context).binaryListOfImages);
+                        debugPrint('is not null: $isNotNull');
+
+                        if (isNotNull) {
+                          addToKeyWordBoxWhenTrue(
+                            keyWord: widget.keyWord,
+                          );
+                          addNewAnswerModel(
+                              keyWord: widget.keyWord,
+                              imagesUrl: TranslationInherited.of(context)
+                                  .binaryListOfImages!,
+                              totalList: definitionList);
+                        }
+                      });
+
+
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(
@@ -145,4 +137,5 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
       );
     });
   }
+
 }

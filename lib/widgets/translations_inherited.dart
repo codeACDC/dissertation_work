@@ -16,6 +16,7 @@ class TranslationInherited extends InheritedWidget {
 
   @override
   bool updateShouldNotify(TranslationInherited old) {
+    print(binaryListOfImages != null);
     return binaryListOfImages != null &&
         binaryListOfImages != old.binaryListOfImages;
   }

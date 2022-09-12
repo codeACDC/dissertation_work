@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -97,25 +96,27 @@ class _MainHeroPageState extends State<MainHeroPage> {
                                           height: giveH(size: 50, mh: freeMh),
                                           width: giveW(size: 270, mw: mw),
                                           decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                  spreadRadius:
-                                                      giveH(size: 2, mh: mh),
-                                                  blurRadius:
-                                                      giveH(size: 3, mh: mh),
-                                                  offset:
-                                                      Offset.fromDirection(-3)),
-                                            ],
-                                            borderRadius: BorderRadius.circular(
-                                                giveH(size: 10, mh: freeMh)),
-                                          ),
-                                          child: Image.memory(
-                                              Uint8List.fromList(widget
-                                                  .imagesUrl
-                                                  .elementAt(index)),
-                                              fit: BoxFit.cover),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                    spreadRadius:
+                                                        giveH(size: 2, mh: mh),
+                                                    blurRadius:
+                                                        giveH(size: 3, mh: mh),
+                                                    offset:
+                                                        Offset.fromDirection(
+                                                            -3)),
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(giveH(
+                                                      size: 10, mh: freeMh)),
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                  image: MemoryImage(
+                                                      Uint8List.fromList(widget
+                                                          .imagesUrl
+                                                          .elementAt(index))))),
                                         );
                                       },
                                       options: CarouselOptions(

@@ -18,16 +18,24 @@ class TranslationPage extends StatefulWidget {
 class _TranslationPageState extends State<TranslationPage> {
   @override
   Widget build(BuildContext context) {
-    final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
+    final List tempArgs = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as List;
     final String tempKeyWord = tempArgs[0];
     final List<String> tempImagesUrl = tempArgs[1];
 
     final keyWord = tempKeyWord.toString();
-    double mh = MediaQuery.of(context).size.height;
+    double mh = MediaQuery
+        .of(context)
+        .size
+        .height;
     // double mw = MediaQuery.of(context).size.width;
     return TranslationInherited(
       child: Builder(builder: (context) {
-        TranslationInherited.of(context).binaryListOfImages = null;
+        TranslationInherited
+            .of(context)
+            .binaryListOfImages = null;
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(
@@ -37,7 +45,8 @@ class _TranslationPageState extends State<TranslationPage> {
                       bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
                       bottomRight: Radius.circular(giveH(size: 10, mh: mh)))),
               title: Text(
-                  'Слово ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
+                  'Слово ${keyWord.replaceFirst(
+                      keyWord[0], keyWord[0].toUpperCase())}'),
               backgroundColor: Colors.deepPurple[800],
             ),
             body: SafeArea(
@@ -45,22 +54,56 @@ class _TranslationPageState extends State<TranslationPage> {
                     keyWord: keyWord, imagesUrl: tempImagesUrl)),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
             floatingActionButton: FloatingActionButton(
-              child: Icon(
-                Icons.navigate_next,
-                size: giveH(size: 25, mh: mh),
-                color: Colors.black,
-              ),
-              backgroundColor: Colors.amber,
-              onPressed: () {
-                if (TranslationInherited.of(context).binaryListOfImages !=
-                    null) {
-                  Navigator.of(context).pushReplacementNamed(MainPage.id);
-                }
-              },
-            ),
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  if (TranslationInherited
+                      .of(context)
+                      .binaryListOfImages !=
+                      null) {
+                    Navigator.of(context).pushReplacementNamed(MainPage.id);
+                  }
+                },
+                child: StreamBuilder(
+                  stream: streamOfTranslationInheritedVariable(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Icon(
+                        Icons.check,
+                        size: giveH(size: 25, mh: mh),
+                        color: Colors.black,
+                      );
+                    } else if (!snapshot.hasData) {
+                      return const CircularProgressIndicator(
+                          color: Colors.black);
+                    } else {
+                      return Icon(
+                        Icons.error_outline,
+                        size: giveH(size: 25, mh: mh),
+                        color: Colors.black,
+                      );
+                    }
+                  },
+                )),
           ),
         );
       }),
     );
   }
+
+  Stream<List<dynamic>?> streamOfTranslationInheritedVariable() async*{
+    var binaryListOfImages = TranslationInherited.of(context).binaryListOfImages;
+    try{
+      while (true) {
+        if (binaryListOfImages != null) {
+          yield binaryListOfImages;
+          break;
+        }
+      }
+    }
+    catch(e) {
+      debugPrint(e.toString());
+    }
+  }
 }
+
+
