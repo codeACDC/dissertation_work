@@ -3,7 +3,6 @@ import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../pages/main_page/drawer/exit_widget.dart';
@@ -65,19 +64,19 @@ Color answerColor(bool? answer) {
   }
 }
 
-Future<List> toBinaryDataConverter ({required List imagesUrl}) async {
-  try {
-    List binaryListOfImages = [];
-    for (int i = 0; i < imagesUrl.length; i++) {
-      Response response =  await get(Uri.parse(imagesUrl[i]));
-      binaryListOfImages.add(response.bodyBytes);
-    }
-    return binaryListOfImages;
-  }
-  catch (e) {
-    return [];
-  }
-}
+// Future<List> toBinaryDataConverter ({required List imagesUrl}) async {
+//   try {
+//     List binaryListOfImages = [];
+//     for (int i = 0; i < imagesUrl.length; i++) {
+//       Response response =  await get(Uri.parse(imagesUrl[i]));
+//       binaryListOfImages.add(response.bodyBytes);
+//     }
+//     return binaryListOfImages;
+//   }
+//   catch (e) {
+//     return [];
+//   }
+// }
 
 void addNewAnswerModel({
   required String keyWord,

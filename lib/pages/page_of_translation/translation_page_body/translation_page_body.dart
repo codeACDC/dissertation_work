@@ -12,7 +12,7 @@ class TranslationPageBody extends StatefulWidget {
   final String keyWord;
   final List<String> imagesUrl;
 
-  TranslationPageBody({
+  const TranslationPageBody({
     Key? key,
     required this.keyWord,
     required this.imagesUrl,
@@ -38,8 +38,11 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter)),
         child: BlocProvider<TranslatorCubit>(
-          create: (context) =>
-              TranslatorCubit(search: widget.keyWord)..translationParser(),
+          create: (context) => TranslatorCubit(
+            search: widget.keyWord,
+            context: context,
+            imagesUrl: widget.imagesUrl,
+          )..translationParser(),
           child: BlocBuilder<TranslatorCubit, TranslatorState>(
               buildWhen: (previousState, currentState) =>
                   previousState != currentState,
@@ -54,7 +57,6 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                       ),
                       onPressed: () {
                         context.read<TranslatorCubit>().translationParser();
-
                       },
                       color: Colors.deepPurple[800],
                       child: Row(
@@ -83,33 +85,27 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                 }
                 if (state is TranslatorLoaded) {
                   final List definitionList = state.loadedTranslation;
-                  if(!isAnswerModelImagesExist(widget.keyWord)) {
-                    toBinaryDataConverter(
-                          imagesUrl: widget.imagesUrl).then((value) {
-                            TranslationInherited.of(context).binaryListOfImages = value;
-                        bool isNotNull =
-                            TranslationInherited.of(context).binaryListOfImages !=
-                                null;
+                  if (!isAnswerModelImagesExist(widget.keyWord)) {
+                    bool isNotNull =
+                        TranslationInherited.of(context).binaryListOfImages !=
+                            null;
 
-                        if (isNotNull) {
-                          addToKeyWordBoxWhenTrue(
-                            keyWord: widget.keyWord,
-                          );
-                          addNewAnswerModel(
-                              keyWord: widget.keyWord,
-                              imagesUrl: TranslationInherited.of(context)
-                                  .binaryListOfImages!,
-                              totalList: definitionList);
-                        }
-                      });
-                  }
-                  else {
+                    if (isNotNull) {
+                      addToKeyWordBoxWhenTrue(
+                        keyWord: widget.keyWord,
+                      );
+                      addNewAnswerModel(
+                          keyWord: widget.keyWord,
+                          imagesUrl: TranslationInherited.of(context)
+                              .binaryListOfImages!,
+                          totalList: definitionList);
+                    }
+                  } else {
                     addToKeyWordBoxWhenTrue(
                       keyWord: widget.keyWord,
                     );
                     TranslationInherited.of(context).binaryListOfImages = [];
                   }
-
 
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -143,5 +139,4 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
       );
     });
   }
-
 }
