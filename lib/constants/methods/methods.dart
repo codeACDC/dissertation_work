@@ -149,6 +149,15 @@ bool isDataExist(
   return isExist;
 }
 
+
+void deleteAllData() {
+  // Emergency delete
+  var keyWordBox = Hive.box(Constants.keyWordBox);
+  keyWordBox.deleteAll(keyWordBox.keys);
+  var answerBox = Hive.box(Constants.answerBox);
+  answerBox.deleteAll(answerBox.keys);
+}
+
 void detectChanges() {
   //Open changes box
   var changesBox = Hive.box(Constants.saveChangeBox);

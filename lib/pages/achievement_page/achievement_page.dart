@@ -16,10 +16,57 @@ class AchievementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double mh = MediaQuery.of(context).size.height;
+    final double mw = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: ConstColor.blackBoard0C,
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Wrap(
+                        children:[ Text(
+                            'Сиздин баардык жетишкендиктериңиз өчөт!',
+                        style:TextStyle(fontSize: giveH(size: 12, mh: mh),
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white, fontFamily: 'Roboto'))
+                          ]
+                      ),
+                      alignment: Alignment.center,
+                      actionsAlignment: MainAxisAlignment.spaceBetween,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(giveH(size: 10, mh: mh))),
+                      elevation: giveH(size: 2, mh: mh),
+                      actionsPadding: EdgeInsets.symmetric(
+                          horizontal: giveW(size: 14, mw: mw),
+                          vertical: giveH(size: 5, mh: mh)),
+                      backgroundColor: ConstColor.blackBoard0C,
+                      actions: [
+                        AlertButtonWidget(
+                          mh: mh,
+                          text: 'ооба',
+                          onPressed: deleteAllData,
+                        ),
+                        AlertButtonWidget(
+                          mh: mh,
+                          text: 'жок',
+                          onPressed: (){},
+                        )
+                      ],
+                    );
+                  }
+                );}
+              ,
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ))
+        ],
         backgroundColor: Colors.deepPurple[800],
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -72,7 +119,8 @@ class AchievementPage extends StatelessWidget {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
-                                    mainAxisSpacing: giveH(size: 10, mh: freeMh),
+                                    mainAxisSpacing:
+                                        giveH(size: 10, mh: freeMh),
                                     crossAxisSpacing:
                                         giveW(size: 15, mw: freeMw)),
                             itemCount: answerBox.length,
@@ -80,8 +128,7 @@ class AchievementPage extends StatelessWidget {
                               AnswerModel answerModelAtIndex =
                                   answerBox.values.elementAt(index);
                               String keyWord = answerModelAtIndex.word;
-                              List imagesUrl =
-                                  answerModelAtIndex.imagesUrl;
+                              List imagesUrl = answerModelAtIndex.imagesUrl;
 
                               List totalList = answerModelAtIndex.totalList;
 
@@ -101,6 +148,37 @@ class AchievementPage extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+class AlertButtonWidget extends StatelessWidget {
+  const AlertButtonWidget({
+    Key? key,
+    required this.mh,
+    required this.text,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final double mh;
+  final String text;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      onPressed: () {
+        onPressed();
+        Navigator.of(context).pop();
+      },
+      color: ConstColor.translationText,
+      elevation: giveH(size: 1, mh: mh),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
+      child: flexTextWidget(
+          text: text,
+          fontSize: giveH(size: 12, mh: mh),
+          fontWeight: FontWeight.w500),
     );
   }
 }

@@ -107,6 +107,7 @@ class StartPageBody extends StatelessWidget {
                                       .read<FirebaseFirestoreCubit>()
                                       .loadDataFromFirebase();
                                 },
+                                color: Colors.deepPurple[800],
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -121,7 +122,7 @@ class StartPageBody extends StatelessWidget {
                                         fontWeight: FontWeight.w400)
                                   ],
                                 ),
-                                color: Colors.deepPurple[800],
+
                               ),
                             );
                           }

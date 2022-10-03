@@ -58,21 +58,21 @@ static const String id = 'exit';
             }
             exit(0);
           },
-          child: flexTextWidget(text: 'Да', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
           color: ConstColor.translationText,
           elevation: giveH(size: 1, mh: mh),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
+          child: flexTextWidget(text: 'Да', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
         ),
         MaterialButton(
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: flexTextWidget(text: 'Нет', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
           color: ConstColor.translationText,
           elevation: giveH(size: 1, mh: mh),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
+          child: flexTextWidget(text: 'Нет', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
         ),
       ],
       actionsAlignment: MainAxisAlignment.spaceBetween,

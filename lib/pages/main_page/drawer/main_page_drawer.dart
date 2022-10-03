@@ -1,6 +1,5 @@
 import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/constants/methods/methods.dart';
-import 'package:dissertation_work/pages/achievement_page/achievement_page.dart';
 import 'package:dissertation_work/pages/hint_page/hint_page.dart';
 import 'package:dissertation_work/pages/main_page/drawer/exit_widget.dart';
 import 'package:dissertation_work/pages/start_page/start_page.dart';
@@ -19,11 +18,6 @@ class MainPageDrawer extends StatelessWidget {
       title: 'Главное меню',
       leadingIcon: Icons.home,
       routeId: StartPage.id,
-    ),
-    DrawerListTileModel(
-      title: 'Достижения',
-      leadingIcon: Icons.system_security_update_good_rounded,
-      routeId: AchievementPage.id,
     ),
     DrawerListTileModel(
       title: 'Подсказки',
