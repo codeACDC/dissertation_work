@@ -8,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import '../../pages/main_page/drawer/exit_widget.dart';
 import '../../pages/page_of_translation/translation_page.dart';
 import '../../widgets/models/answer_model.dart';
+import '../../widgets/models/firebase_model.dart';
 import '../../widgets/models/letter_model.dart';
 
 double giveH({
@@ -195,7 +196,7 @@ void detectChanges() {
   }
 }
 
-String nextKeyWord() {
+FireBaseAnswerModel nextKeyWord() {
   //Open keyWordBox
   var keyWordBox = Hive.box(Constants.keyWordBox);
   //Open fireBaseBox and get its values
@@ -213,7 +214,7 @@ String nextKeyWord() {
 
   //get list of data that doesn't contain in keyWordList
   List tempKeyWords = fireBaseBoxValues
-      .where((element) => !keyWordValues.contains(element))
+      .where((element) => !keyWordValues.contains(element.kgKeyWord))
       .toList();
 
   //get first keyWord elem

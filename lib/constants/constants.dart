@@ -5,8 +5,8 @@ class Constants {
   static const String yandexDictApiKey =
       'dict.1.1.20220531T093521Z.4df76d6ce4cfca57.45cf38f86dfee013c2e1bb523380c2aa8c436798';
   static const List<String> alphabetList =
-  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л',
+    'М', 'Н','Ң', 'П', 'Р', 'С', 'Т', 'О', 'Ө', 'У', 'Ү', 'Ф', 'Х', 'Ч','Ц' 'Ъ','Ь','Ш','Щ','Ы','Э','Ю','Я'];
   static const Map<String, String> soundEffectsMap = {
     'correctSoundPath': 'lib/sound_effects/correct_answer.mp3',
     'inCorrectSoundPath': 'lib/sound_effects/wrong_answer.mp3',
@@ -16,6 +16,7 @@ class Constants {
   static const saveChangeBox = 'save_change_box';
   static const fireBaseBox = 'fire_base_box';
   static const firebaseCollectionName = 'keyWords';
+  static const firebaseCompetitionCollectionName = 'competitionKeyWords';
   static const firebaseKeyWordDocName = 'nouns';
   static const soundVolumeStateBox = 'sound_volume_state_box';
 }

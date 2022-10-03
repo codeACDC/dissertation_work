@@ -123,11 +123,11 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
-                          ...definitionList.map((e) => TranslationWidget(
+                           TranslationWidget(
                                 mh: mh,
                                 mw: mw,
-                                translationMap: e,
-                              )),
+                                translation: definitionList,
+                              ),
                         ],
                       ),
                     ),

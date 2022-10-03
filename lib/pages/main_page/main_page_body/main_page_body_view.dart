@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:confetti/confetti.dart';
 import 'package:dissertation_work/bloc/image_loader/image_loader_cubit.dart';
 import 'package:dissertation_work/pages/main_page/main_page_body/grid_of_image.dart';
+import 'package:dissertation_work/widgets/models/firebase_model.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,9 @@ class _MainPageBodyState extends State<MainPageBody> {
   late final Map<LetterModel, List<dynamic>> saveIndexArray;
   late final List<LetterModel> randomLetterList;
   late final List<LetterModel> emptyStringList;
+  late final FireBaseAnswerModel keyWord;
   late final String tempKeyWord;
+  late final String searchKeyWord;
   late final CorrectAnswerModel correctAnswerModel;
   late final Alignment inCorrectAnswerAlign;
   final confettiController = ConfettiController(
@@ -46,9 +49,10 @@ class _MainPageBodyState extends State<MainPageBody> {
     detectChanges();
 
     //Preparation data
-    tempKeyWord = nextKeyWord();
+    keyWord = nextKeyWord();
+    tempKeyWord = keyWord.kgKeyWord;
 
-    debugPrint('Key word: ' + tempKeyWord);
+    debugPrint('Key word: $tempKeyWord');
     correctAnswerModel =
         CorrectAnswerModel(correctAnswer: tempKeyWord, isCorrect: null);
     List<String> tempRandomLetterList = tempKeyWord.toUpperCase().split('');
@@ -127,7 +131,7 @@ class _MainPageBodyState extends State<MainPageBody> {
               //Image load bloc
               child: BlocProvider<ImageLoaderCubit>(
                 create: (context) =>
-                    ImageLoaderCubit(searchText: tempKeyWord)..getPhotos(),
+                    ImageLoaderCubit(searchText: searchKeyWord)..getPhotos(),
                 child: ConfettiWidget(
                   maxBlastForce: 50,
                   gravity: 0.5,
@@ -178,6 +182,7 @@ class _MainPageBodyState extends State<MainPageBody> {
                                                 .read<ImageLoaderCubit>()
                                                 .getPhotos();
                                           },
+                                          color: Colors.deepPurple[800],
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -192,7 +197,6 @@ class _MainPageBodyState extends State<MainPageBody> {
                                                   fontWeight: FontWeight.w400)
                                             ],
                                           ),
-                                          color: Colors.deepPurple[800],
                                         ),
                                       );
                                     }

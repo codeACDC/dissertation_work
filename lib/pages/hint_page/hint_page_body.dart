@@ -1,4 +1,5 @@
 import 'package:dissertation_work/constants/methods/methods.dart';
+import 'package:dissertation_work/widgets/models/firebase_model.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -36,7 +37,7 @@ class HintPageBody extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 flexTextWidget(
-                  text: 'Ключевые слова:',
+                  text: 'Негизги сөздөр:',
                   fontSize: giveH(size: 20, mh: mh),
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -48,7 +49,7 @@ class HintPageBody extends StatelessWidget {
                     builder: (context, Box box, _) {
                       if (box.isEmpty) {
                         return flexTextWidget(
-                          text: 'Нету нужной информации',
+                          text: 'Керектүү маалымат жок!',
                           fontSize: giveH(size: 16, mh: mh),
                           fontWeight: FontWeight.w500,
                           color: ConstColor.translationText,
@@ -80,13 +81,13 @@ class HintPageBody extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(
                                         giveH(size: 20, mh: mh))),
                                 child: flexTextWidget(
-                                    text: ' '+(index + 1).toString()+' ',
+                                    text: ' ${index + 1} ',
                                     fontSize: giveH(size: 14, mh: mh),
                                     fontWeight: FontWeight.w600,
                                     color: ConstColor.translationText),
                               ),
                               flexTextWidget(
-                                  text: box.values.elementAt(index) + '  ',
+                                  text: box.values.elementAt(index).kgKeyWord + '  ',
                                   fontSize: giveH(size: 14, mh: mh),
                                   fontWeight: FontWeight.w500,
                                   color: ConstColor.blackBoard0C),

@@ -31,14 +31,13 @@ class TranslatorCubit extends Cubit<TranslatorState> {
     try {
       emit(const TranslatorLoading());
       final String url =
-          'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${Constants
-          .yandexDictApiKey}&lang=en-ru&text=$search';
+          'https://el-sozduk.kg/$search/';
 
       final translateLoader = TranslateLoader(url: url);
-      final Map tempLoadedMap = await translateLoader.translateLoader();
+      final List tempLoaded = await translateLoader.translateLoader();
 
       await toBinaryDataConverter(imagesUrl: imagesUrl);
-      emit(TranslatorLoaded(loadedTranslation: tempLoadedMap['def']));
+      emit(TranslatorLoaded(loadedTranslation: tempLoaded));
     }
     catch (e) {
       emit(TranslatorError(translationError: e.toString()));

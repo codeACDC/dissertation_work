@@ -26,6 +26,7 @@ void main() async {
     await Hive.openBox(Constants.keyWordBox);
     await Hive.openBox(Constants.saveChangeBox);
     await Hive.openBox(Constants.fireBaseBox);
+    // await Hive.box(Constants.fireBaseBox).deleteFromDisk();
     await Hive.openBox(Constants.soundVolumeStateBox);
     await Firebase.initializeApp();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
