@@ -24,16 +24,16 @@ class _TranslationWidgetState extends State<TranslationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (siteModelList.isNotEmpty) {
+    if (siteModelList.isEmpty) {
       for (int i = 0; i < widget.translation[2].length; i++) {
-        siteModelList.add(SiteModel(
-            article: widget.translation[0][i],
-            contentSource: widget.translation[1][i],
-            content: widget.translation[2][i]));
+        setState(() {
+          siteModelList.add(SiteModel(
+              article: widget.translation[0][i],
+              contentSource: widget.translation[1][i],
+              content: widget.translation[2][i]));
+        });
       }
-      setState(() {
-        siteModelList;
-      });
+
     }
     final double mh = widget.mh;
     final double mw = widget.mw;
@@ -42,34 +42,65 @@ class _TranslationWidgetState extends State<TranslationWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: siteModelList
-            .map((e) => Padding(
-                  padding: EdgeInsets.only(bottom: giveH(size: 3, mh: mh)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: ConstColor.translationText,
-                            borderRadius: BorderRadius.only(
-                                topRight:
-                                    Radius.circular(giveH(size: 5, mh: mh)))),
-                        child: Text(
-                          e.article,
-                          style: TextStyle(
-                              color: ConstColor.blackBoard0C,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Roboto',
-                              fontSize: giveH(size: 16, mh: mh)),
-                        ),
-                      ),
-                      Wrap(
-                        children: [
-                          Container(decoration:BoxDecoration(color: ConstColor.blackBoard0C,))
-                      ])],
+            .map((e) =>
+            Padding(
+              padding: EdgeInsets.only(bottom: giveH(size: 3, mh: mh)),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+              Container(
+                padding: EdgeInsets.all(giveH(size: 10, mh: mh)),
+                width: mw,
+              decoration: BoxDecoration(
+              color: ConstColor.translationText,
+                  borderRadius: BorderRadius.only(
+                      topRight:
+                      Radius.circular(giveH(size: 10, mh: mh)))),
+              child: Text(
+                e.article,
+                style: TextStyle(
+                    color: ConstColor.blackBoard0C,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Roboto',
+                    fontSize: giveH(size: 16, mh: mh)),
+              ),
+            ),
+          Wrap(children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: ConstColor.blackBoard0C,
+              ),
+              child: Text(
+                e.contentSource,
+                style: TextStyle(
+                    color: ConstColor.translationText,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Roboto',
+                    fontSize: giveH(size: 14, mh: mh)),
+              ),
+            )
+          ]), Wrap(children: [
+            Container(
+                decoration: BoxDecoration(
+                  color: ConstColor.blackBoard0C,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(giveH(size: 5, mh: mh))
+                  )),
+                  child: Text(
+                    e.content,
+                    style: TextStyle(
+                        color: ConstColor.translationText,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Roboto',
+                        fontSize: giveH(size: 12, mh: mh)),
                   ),
-                ))
-            .toList());
+                )
+                ]),
+          ],
+          ),
+        ))
+        .toList());
   }
 }
 
@@ -78,8 +109,7 @@ class SiteModel {
   final String contentSource;
   final String content;
 
-  const SiteModel(
-      {required this.article,
-      required this.contentSource,
-      required this.content});
+  const SiteModel({required this.article,
+    required this.contentSource,
+    required this.content});
 }

@@ -112,7 +112,7 @@ class _MainHeroPageState extends State<MainHeroPage> {
                                                   BorderRadius.circular(giveH(
                                                       size: 10, mh: freeMh)),
                                               image: DecorationImage(
-                                                fit: BoxFit.cover,
+                                                  fit: BoxFit.cover,
                                                   image: MemoryImage(
                                                       Uint8List.fromList(widget
                                                           .imagesUrl
@@ -135,14 +135,9 @@ class _MainHeroPageState extends State<MainHeroPage> {
                                 ),
                               ],
                             ),
-                      ...widget.totalList.map((e) {
-                        //Make from _InternalLinkedHashMap<dynamic, dynamic> to Map<String, dynamic>
-                        final Map<String, dynamic> tempElem =
-                            Map<String, dynamic>.from(e);
-
-                        return TranslationWidget(
-                            mh: freeMh, mw: freeMw, translationMap: tempElem);
-                      })
+                      //Make from _InternalLinkedHashMap<dynamic, dynamic> to Map<String, dynamic>
+                      TranslationWidget(
+                          mh: freeMh, mw: freeMw, translation: widget.totalList)
                     ],
                   ),
                 ),

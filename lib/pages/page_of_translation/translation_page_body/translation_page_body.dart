@@ -84,7 +84,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                   );
                 }
                 if (state is TranslatorLoaded) {
-                  final List definitionList = state.loadedTranslation;
+                  var loadedTranslation = state.loadedTranslation;
                   if (!isAnswerModelImagesExist(widget.keyWord)) {
                     bool isNotNull =
                         TranslationInherited.of(context).binaryListOfImages !=
@@ -98,7 +98,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                           keyWord: widget.keyWord,
                           imagesUrl: TranslationInherited.of(context)
                               .binaryListOfImages!,
-                          totalList: definitionList);
+                          totalList: loadedTranslation);
                     }
                   } else {
                     addToKeyWordBoxWhenTrue(
@@ -126,7 +126,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                            TranslationWidget(
                                 mh: mh,
                                 mw: mw,
-                                translation: definitionList,
+                                translation: loadedTranslation,
                               ),
                         ],
                       ),

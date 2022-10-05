@@ -51,6 +51,7 @@ class _MainPageBodyState extends State<MainPageBody> {
     //Preparation data
     keyWord = nextKeyWord();
     tempKeyWord = keyWord.kgKeyWord;
+    searchKeyWord = keyWord.enKeyWord;
 
     debugPrint('Key word: $tempKeyWord');
     correctAnswerModel =

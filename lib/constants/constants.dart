@@ -6,7 +6,9 @@ class Constants {
       'dict.1.1.20220531T093521Z.4df76d6ce4cfca57.45cf38f86dfee013c2e1bb523380c2aa8c436798';
   static const List<String> alphabetList =
   ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л',
-    'М', 'Н','Ң', 'П', 'Р', 'С', 'Т', 'О', 'Ө', 'У', 'Ү', 'Ф', 'Х', 'Ч','Ц' 'Ъ','Ь','Ш','Щ','Ы','Э','Ю','Я'];
+    'М', 'Н','Ң', 'П', 'Р', 'С', 'Т', 'О', 'Ө', 'У', 'Ү', 'Ф', 'Х',
+    'Ч','Ц' 'Ъ','Ь','Ш','Щ','Ы','Э','Ю','Я'];
+
   static const Map<String, String> soundEffectsMap = {
     'correctSoundPath': 'lib/sound_effects/correct_answer.mp3',
     'inCorrectSoundPath': 'lib/sound_effects/wrong_answer.mp3',

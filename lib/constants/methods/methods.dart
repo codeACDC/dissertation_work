@@ -65,20 +65,6 @@ Color answerColor(bool? answer) {
   }
 }
 
-// Future<List> toBinaryDataConverter ({required List imagesUrl}) async {
-//   try {
-//     List binaryListOfImages = [];
-//     for (int i = 0; i < imagesUrl.length; i++) {
-//       Response response =  await get(Uri.parse(imagesUrl[i]));
-//       binaryListOfImages.add(response.bodyBytes);
-//     }
-//     return binaryListOfImages;
-//   }
-//   catch (e) {
-//     return [];
-//   }
-// }
-
 void addNewAnswerModel({
   required String keyWord,
   required List totalList,
@@ -119,8 +105,6 @@ void addNewAnswerModel({
     //add edited answer model list
     answerBox.addAll(answerBoxList);
   }
-  //Emergency delete
-  // answerBox.deleteAll(answerBox.keys);
 }
 bool isAnswerModelImagesExist(String  keyWord) {
   var answerBox = Hive.box(Constants.answerBox);

@@ -8,7 +8,7 @@ part of 'firebase_model.dart';
 
 class FireBaseAnswerModelAdapter extends TypeAdapter<FireBaseAnswerModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   FireBaseAnswerModel read(BinaryReader reader) {
