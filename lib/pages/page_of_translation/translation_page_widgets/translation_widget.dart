@@ -44,7 +44,7 @@ class _TranslationWidgetState extends State<TranslationWidget> {
         children: siteModelList
             .map((e) =>
             Padding(
-              padding: EdgeInsets.only(bottom: giveH(size: 3, mh: mh)),
+              padding: EdgeInsets.only(bottom: giveH(size: 5, mh: mh), top: giveH(size: 10, mh: mh)),
               child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -56,9 +56,9 @@ class _TranslationWidgetState extends State<TranslationWidget> {
               color: ConstColor.translationText,
                   borderRadius: BorderRadius.only(
                       topRight:
-                      Radius.circular(giveH(size: 10, mh: mh)))),
+                      Radius.circular(giveH(size: 15, mh: mh)))),
               child: Text(
-                e.article,
+                e.article.toLowerCase(),
                 style: TextStyle(
                     color: ConstColor.blackBoard0C,
                     fontWeight: FontWeight.w400,
@@ -68,6 +68,7 @@ class _TranslationWidgetState extends State<TranslationWidget> {
             ),
           Wrap(children: [
             Container(
+              padding: EdgeInsets.all(giveH(size: 10, mh: mh)),
               decoration: const BoxDecoration(
                 color: ConstColor.blackBoard0C,
               ),
@@ -82,10 +83,12 @@ class _TranslationWidgetState extends State<TranslationWidget> {
             )
           ]), Wrap(children: [
             Container(
+              padding: EdgeInsets.all(giveH(size: 10, mh: mh)),
+              width: mw,
                 decoration: BoxDecoration(
                   color: ConstColor.blackBoard0C,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(giveH(size: 5, mh: mh))
+                      bottomLeft: Radius.circular(giveH(size: 15, mh: mh))
                   )),
                   child: Text(
                     e.content,

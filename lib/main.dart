@@ -23,10 +23,9 @@ void main() async {
   }, appRunner: () async {
     WidgetsFlutterBinding.ensureInitialized();
     var appDocDir = await getApplicationDocumentsDirectory();
-     Hive
-       ..initFlutter(appDocDir.path)
-      ..registerAdapter(FireBaseAnswerModelAdapter())
-      ..registerAdapter(AnswerModelAdapter());
+     await Hive.initFlutter(appDocDir.path);
+     Hive.registerAdapter(FireBaseAnswerModelAdapter());
+      Hive.registerAdapter(AnswerModelAdapter());
 
     await Hive.openBox(Constants.answerBox);
     await Hive.openBox(Constants.keyWordBox);
