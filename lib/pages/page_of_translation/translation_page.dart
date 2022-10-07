@@ -54,7 +54,7 @@ class _TranslationPageState extends State<TranslationPage> {
                       bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
                       bottomRight: Radius.circular(giveH(size: 10, mh: mh)))),
               title: Text(
-                  'Слово ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
+                  'Сөз: ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
               backgroundColor: Colors.deepPurple[800],
             ),
             body: SafeArea(

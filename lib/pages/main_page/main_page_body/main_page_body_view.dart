@@ -192,7 +192,7 @@ class _MainPageBodyState extends State<MainPageBody> {
                                                 color: Colors.white,
                                               ),
                                               flexTextWidget(
-                                                  text: '  Повторить',
+                                                  text: '  Кайталоо',
                                                   color: Colors.white,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400)

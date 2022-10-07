@@ -49,12 +49,12 @@ class AchievementPage extends StatelessWidget {
                       actions: [
                         AlertButtonWidget(
                           mh: mh,
-                          text: 'ооба',
+                          text: 'Ооба',
                           onPressed: deleteAllData,
                         ),
                         AlertButtonWidget(
                           mh: mh,
-                          text: 'жок',
+                          text: 'Жок',
                           onPressed: (){},
                         )
                       ],
@@ -73,7 +73,7 @@ class AchievementPage extends StatelessWidget {
                 bottomRight: Radius.circular(giveH(size: 10, mh: mh)),
                 bottomLeft: Radius.circular(giveH(size: 10, mh: mh)))),
         title: flexTextWidget(
-          text: 'Достижения',
+          text: 'Жетишкендиктер',
           fontSize: 25,
           fontWeight: FontWeight.w600,
           color: Colors.white,
@@ -106,7 +106,7 @@ class AchievementPage extends StatelessWidget {
                         if (box.values.isEmpty) {
                           return Center(
                             child: flexTextWidget(
-                              text: 'Нет разгаданных слов!',
+                              text: 'Ачылган сөздөр жок!',
                               fontSize: giveH(size: 15, mh: freeMh),
                               fontWeight: FontWeight.w600,
                               color: Colors.white,

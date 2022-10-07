@@ -244,7 +244,7 @@ void showCongratulation({
             return SizedBox(
                 height: giveH(size: 50, mh: mh),
                 child: flexTextWidget(
-                    text: 'Правильно!',
+                    text: 'Туура!',
                     fontSize: giveH(size: 20, mh: mh),
                     color: Colors.white));
           }),

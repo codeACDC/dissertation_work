@@ -15,17 +15,17 @@ class MainPageDrawer extends StatelessWidget {
 
   final List<DrawerListTileModel> tileModelList = const [
     DrawerListTileModel(
-      title: 'Главное меню',
+      title: 'Башкы меню',
       leadingIcon: Icons.home,
       routeId: StartPage.id,
     ),
     DrawerListTileModel(
-      title: 'Подсказки',
+      title: 'Кеңешмелер',
       leadingIcon: Icons.help_outline,
       routeId: HintPage.id,
     ),
     DrawerListTileModel(
-      title: 'Выход',
+      title: 'Чыгуу',
       leadingIcon: Icons.exit_to_app,
       routeId: ExitWidget.id,
     )

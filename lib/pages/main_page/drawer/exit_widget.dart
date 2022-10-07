@@ -20,16 +20,20 @@ static const String id = 'exit';
           bottom: giveH(size: 30, mh: mh),
           right: giveW(size: 10, mw: mw),
           left: giveW(size: 10, mw: mw)),
-      title: flexTextWidget(
-          text: 'Вы хотите выйти?',
-          fontSize: giveH(size: 16, mh: mh),
-          fontWeight: FontWeight.w600,
-          color: Colors.white),
+      title: Wrap(
+        children: [
+          Text('Чыгууну каалайсызбы?',
+          style:TextStyle(fontSize: giveH(size: 16, mh: mh),
+              fontWeight: FontWeight.w600,
+              color: Colors.white),
+          ),
+        ],
+      ),
       alignment: Alignment.center,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(giveH(size: 10, mh: mh))),
       elevation: giveH(size: 2, mh: mh),
-      backgroundColor: ConstColor.blackBoard0C,
+      backgroundColor: ConstColor.greyBoard31,
       actionsPadding: EdgeInsets.symmetric(horizontal: giveW(size: 14, mw: mw), vertical: giveH(size: 5, mh: mh)),
       actions: [
         MaterialButton(
@@ -62,7 +66,7 @@ static const String id = 'exit';
           elevation: giveH(size: 1, mh: mh),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
-          child: flexTextWidget(text: 'Да', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
+          child: flexTextWidget(text: 'Ооба', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
         ),
         MaterialButton(
           onPressed: () {
@@ -72,7 +76,7 @@ static const String id = 'exit';
           elevation: giveH(size: 1, mh: mh),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(giveH(size: 5, mh: mh))),
-          child: flexTextWidget(text: 'Нет', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
+          child: flexTextWidget(text: 'Жок', fontSize: giveH(size: 12, mh: mh), fontWeight: FontWeight.w500,),
         ),
       ],
       actionsAlignment: MainAxisAlignment.spaceBetween,

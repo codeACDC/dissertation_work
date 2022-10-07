@@ -118,7 +118,7 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           flexTextWidget(
-                            text: 'Словарь',
+                            text: 'Сөздук',
                             fontSize: giveH(size: 20, mh: mh),
                             fontWeight: FontWeight.w600,
                             color: Colors.white,

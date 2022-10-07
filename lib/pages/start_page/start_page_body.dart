@@ -16,19 +16,19 @@ class StartPageBody extends StatelessWidget {
   const StartPageBody({Key? key}) : super(key: key);
   static const List<StartPageButtonModel> startButtonTitles = [
     StartPageButtonModel(
-        title: 'Начать игру',
+        title: 'Оюнду баштоо',
         route: MainPage.id,
         icon: Icons.directions_run_sharp),
     StartPageButtonModel(
-        title: 'Достижения',
+        title: 'Жетишкендиктер',
         route: AchievementPage.id,
         icon: Icons.system_security_update_good_rounded),
     StartPageButtonModel(
-        title: 'Подсказки',
+        title: 'Кеңешмелер',
         route: HintPage.id,
         icon: Icons.help_outline),
     StartPageButtonModel(
-        title: 'Выход', route: ExitWidget.id, icon: Icons.exit_to_app),
+        title: 'Чыгуу', route: ExitWidget.id, icon: Icons.exit_to_app),
   ];
 
   @override
@@ -54,7 +54,7 @@ class StartPageBody extends StatelessWidget {
               ),
               AnimatedTextKit(totalRepeatCount: 1, animatedTexts: [
                 WavyAnimatedText(
-                  'Угадай слово!',
+                  'Сөздү тап!',
                   speed: const Duration(milliseconds: 150),
                   textStyle: TextStyle(
                       fontSize: giveH(size: 25, mh: mh),
@@ -116,7 +116,7 @@ class StartPageBody extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                     flexTextWidget(
-                                        text: '  Повторить',
+                                        text: '  Кайталоо',
                                         color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400)

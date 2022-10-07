@@ -17,7 +17,7 @@ class HintPage extends StatelessWidget {
       backgroundColor: ConstColor.blackBoard0C,
       appBar: AppBar(
         title: flexTextWidget(
-          text: 'Подсказки',
+          text: 'Кеңешмелер',
           fontSize: 25,
           fontWeight: FontWeight.w600,
           color: Colors.white,

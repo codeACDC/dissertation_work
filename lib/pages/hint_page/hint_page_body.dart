@@ -1,5 +1,4 @@
 import 'package:dissertation_work/constants/methods/methods.dart';
-import 'package:dissertation_work/widgets/models/firebase_model.dart';
 import 'package:dissertation_work/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -48,11 +47,13 @@ class HintPageBody extends StatelessWidget {
                         Hive.box(Constants.fireBaseBox).listenable(),
                     builder: (context, Box box, _) {
                       if (box.isEmpty) {
-                        return flexTextWidget(
-                          text: 'Керектүү маалымат жок!',
-                          fontSize: giveH(size: 16, mh: mh),
-                          fontWeight: FontWeight.w500,
-                          color: ConstColor.translationText,
+                        return Center(
+                          child: flexTextWidget(
+                            text: 'Керектүү маалымат жок!',
+                            fontSize: giveH(size: 14, mh: mh),
+                            fontWeight: FontWeight.w500,
+                            color: ConstColor.translationText,
+                          ),
                         );
                       }
                       return Column(
