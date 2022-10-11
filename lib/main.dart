@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'pages/main_page/main_page.dart';
 
@@ -23,9 +23,9 @@ void main() async {
   }, appRunner: () async {
     WidgetsFlutterBinding.ensureInitialized();
     var appDocDir = await getApplicationDocumentsDirectory();
-     await Hive.initFlutter(appDocDir.path);
-     Hive.registerAdapter(FireBaseAnswerModelAdapter());
-      Hive.registerAdapter(AnswerModelAdapter());
+    await Hive.initFlutter(appDocDir.path);
+    Hive.registerAdapter(FireBaseAnswerModelAdapter());
+    Hive.registerAdapter(AnswerModelAdapter());
 
     await Hive.openBox(Constants.answerBox);
     await Hive.openBox(Constants.keyWordBox);
@@ -52,13 +52,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Word finder',
       theme: Theme.of(context).copyWith(
+        appBarTheme: const AppBarTheme(
+            color: ConstColor.translationText, foregroundColor: Colors.black),
         scaffoldBackgroundColor: ConstColor.blackBoard0C,
       ),
       home: const StartPage(),
       routes: {
         StartPage.id: (context) => const StartPage(),
         MainPage.id: (context) => const MainPage(),
-        TranslationPage.id: (context) =>  TranslationPage(),
+        TranslationPage.id: (context) => TranslationPage(),
         AchievementPage.id: (context) => const AchievementPage(),
         HintPage.id: (context) => const HintPage(),
       },

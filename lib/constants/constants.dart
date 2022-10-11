@@ -21,6 +21,7 @@ class Constants {
   static const firebaseCompetitionCollectionName = 'competitionKeyWords';
   static const firebaseKeyWordDocName = 'nouns';
   static const soundVolumeStateBox = 'sound_volume_state_box';
+
 }
 
 class ConstColor {

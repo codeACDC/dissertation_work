@@ -21,13 +21,14 @@ class _TranslationPageState extends State<TranslationPage> {
   final ValueNotifier<List<dynamic>?> binaryListValueNotifier =
       ValueNotifier<List<dynamic>?>(null);
   late Timer timer;
+
   @override
   void dispose() {
     timer.cancel();
-     super.dispose();
+    super.dispose();
   }
-  @override
 
+  @override
   Widget build(BuildContext context) {
     final List tempArgs = ModalRoute.of(context)?.settings.arguments as List;
     final String tempKeyWord = tempArgs[0];
@@ -38,12 +39,13 @@ class _TranslationPageState extends State<TranslationPage> {
     // double mw = MediaQuery.of(context).size.width;
     return TranslationInherited(
       child: Builder(builder: (context) {
-              timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-                var tempBinaryListOfImages = TranslationInherited.of(context).binaryListOfImages;
-                if(tempBinaryListOfImages != null) {
-                  binaryListValueNotifier.value = tempBinaryListOfImages;
-                }
-              });
+        timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          var tempBinaryListOfImages =
+              TranslationInherited.of(context).binaryListOfImages;
+          if (tempBinaryListOfImages != null) {
+            binaryListValueNotifier.value = tempBinaryListOfImages;
+          }
+        });
 
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
@@ -54,8 +56,11 @@ class _TranslationPageState extends State<TranslationPage> {
                       bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
                       bottomRight: Radius.circular(giveH(size: 10, mh: mh)))),
               title: Text(
-                  'Сөз: ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}'),
-              backgroundColor: Colors.deepPurple[800],
+                'Сөз: ${keyWord.replaceFirst(keyWord[0], keyWord[0].toUpperCase())}',
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: giveH(size: 12.3, mh: mh)),
+              ),
             ),
             body: SafeArea(
                 child: TranslationPageBody(

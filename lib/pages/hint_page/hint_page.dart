@@ -20,13 +20,11 @@ class HintPage extends StatelessWidget {
           text: 'Кеңешмелер',
           fontSize: 25,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
         ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(giveH(size: 10, mh: mh)),
                 bottomRight: Radius.circular(giveH(size: 10, mh: mh)))),
-        backgroundColor: Colors.deepPurple[800],
       ),
 body: const HintPageBody(),
     );

@@ -246,7 +246,8 @@ void showCongratulation({
                 child: flexTextWidget(
                     text: 'Туура!',
                     fontSize: giveH(size: 20, mh: mh),
-                    color: Colors.white));
+                  fontWeight: FontWeight.w600
+                    ));
           }),
           onVisible: () {
             Future.delayed(
@@ -259,7 +260,7 @@ void showCongratulation({
           },
           duration: const Duration(seconds: 2),
           dismissDirection: DismissDirection.none,
-          backgroundColor: Colors.deepPurple[800],
+          backgroundColor: Colors.amber,
           elevation: giveW(size: 5, mw: mw),
         ));
       },

@@ -64,10 +64,9 @@ class AchievementPage extends StatelessWidget {
               ,
               icon: const Icon(
                 Icons.delete,
-                color: Colors.red,
+                color: Colors.black,
               ))
         ],
-        backgroundColor: Colors.deepPurple[800],
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(giveH(size: 10, mh: mh)),
@@ -76,7 +75,6 @@ class AchievementPage extends StatelessWidget {
           text: 'Жетишкендиктер',
           fontSize: 25,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
         ),
       ),
       body: LayoutBuilder(builder: (context, constraints) {

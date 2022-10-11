@@ -88,9 +88,9 @@ class StartPageBody extends StatelessWidget {
                             );
                           }
                           if (state is FirebaseFirestoreLoading) {
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(
-                                color: Colors.deepPurple[800],
+                                color: Colors.amber,
                               ),
                             );
                           }

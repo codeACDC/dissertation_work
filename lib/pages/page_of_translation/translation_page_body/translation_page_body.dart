@@ -77,9 +77,9 @@ class _TranslationPageBodyState extends State<TranslationPageBody> {
                   );
                 }
                 if (state is TranslatorLoading) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.deepPurple[800],
+                      color: Colors.amber,
                     ),
                   );
                 }

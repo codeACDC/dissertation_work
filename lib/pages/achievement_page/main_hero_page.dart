@@ -46,7 +46,6 @@ class _MainHeroPageState extends State<MainHeroPage> {
     return Scaffold(
         backgroundColor: ConstColor.blackBoard0C,
         appBar: AppBar(
-          backgroundColor: Colors.deepPurple[800],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(giveH(size: 10, mh: mh)),
@@ -55,7 +54,6 @@ class _MainHeroPageState extends State<MainHeroPage> {
             text: tempKeyWord,
             fontSize: 25,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
           ),
         ),
         body: SafeArea(

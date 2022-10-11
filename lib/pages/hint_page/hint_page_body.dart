@@ -56,9 +56,8 @@ class HintPageBody extends StatelessWidget {
                           ),
                         );
                       }
-                      return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      return Wrap(spacing: giveH(size: 5, mh: mh),
+                          crossAxisAlignment: WrapCrossAlignment.start,
                           children: [
                           ...box.values.map((e)
                       {

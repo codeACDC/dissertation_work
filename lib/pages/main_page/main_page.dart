@@ -54,12 +54,10 @@ class _MainPageState extends State<MainPage> {
               bottomRight: Radius.circular(giveH(size: 10, mh: mh)),
             ),
           ),
-          backgroundColor: Colors.deepPurple[800],
           title: flexTextWidget(
             text: 'Word finder',
             fontSize: 25,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
           ),
           actions: [
             IconButton(

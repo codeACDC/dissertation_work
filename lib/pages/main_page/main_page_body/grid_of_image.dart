@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dissertation_work/constants/constants.dart';
 import 'package:dissertation_work/constants/methods/methods.dart';
 import 'package:dissertation_work/widgets/models/image_model.dart';
 import 'package:dissertation_work/widgets/replace_inherited_widget.dart';
@@ -100,7 +101,7 @@ Widget _cachedImageWidget(
               padding: EdgeInsets.all(giveH(size: 37, mh: mh)),
               child: CircularProgressIndicator(
                 value: downloadProgress.progress,
-                color: Colors.deepPurple[800],
+                color: ConstColor.translationText,
               ),
             );
           }),

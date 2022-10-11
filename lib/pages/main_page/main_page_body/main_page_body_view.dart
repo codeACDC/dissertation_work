@@ -154,9 +154,9 @@ class _MainPageBodyState extends State<MainPageBody> {
                                       previousState != currentState,
                                   builder: (context, state) {
                                     if (state is ImageLoaderLoading) {
-                                      return Center(
+                                      return const Center(
                                         child: CircularProgressIndicator(
-                                          color: Colors.deepPurple[800],
+                                          color: Colors.amber,
                                         ),
                                       );
                                     }

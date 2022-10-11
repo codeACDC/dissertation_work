@@ -24,13 +24,16 @@ class FirebaseFirestoreCubit extends Cubit<FirebaseFirestoreState> {
         debugPrint('Connected');
       }
 
-      final data = await FirebaseFirestore.instance
+      var documentSnapshot = FirebaseFirestore.instance
           .collection(Constants.firebaseCompetitionCollectionName)
-          .doc(Constants.firebaseKeyWordDocName)
-          .get();
+          .doc(Constants.firebaseKeyWordDocName);
 
-      var fireBaseDataValues = data.data()!.values;
-      debugPrint('Firebase data: $fireBaseDataValues');
+      // await documentSnapshot.set(Constants.translatedData).then((value) => debugPrint('Data sent,ok!'));
+      final data = await documentSnapshot.get();
+
+      var fireBaseDataValues = data.data()!;
+      debugPrint(
+          'Колличество загруженных слов в онлайн базу данных: ${fireBaseDataValues.length}');
 
       var fireBaseBox = Hive.box(Constants.fireBaseBox);
       if (fireBaseDataValues.length > fireBaseBox.length) {
@@ -40,8 +43,10 @@ class FirebaseFirestoreCubit extends Cubit<FirebaseFirestoreState> {
         var tempFireBaseBoxValues = [];
         for (int i = 0; i < fireBaseDataValues.length; i++) {
           tempFireBaseBoxValues.add(FireBaseAnswerModel(
-            kgKeyWord: fireBaseDataValues.elementAt(i).elementAt(0),
-            enKeyWord: fireBaseDataValues.elementAt(i).elementAt(1),
+            kgKeyWord:
+                fireBaseDataValues.values.elementAt(i).toString().toLowerCase(),
+            enKeyWord:
+                fireBaseDataValues.keys.elementAt(i).toString().toLowerCase(),
           ));
         }
         fireBaseBox.addAll(tempFireBaseBoxValues);
