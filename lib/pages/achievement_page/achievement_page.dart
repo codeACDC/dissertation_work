@@ -93,10 +93,6 @@ class AchievementPage extends StatelessWidget {
               SizedBox(
                 width: freeMw,
                 height: freeMh,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: giveH(size: 10, mh: freeMh),
-                      horizontal: giveW(size: 15, mw: freeMw)),
                   child: ValueListenableBuilder(
                       valueListenable:
                           Hive.box(Constants.answerBox).listenable(),
@@ -113,6 +109,9 @@ class AchievementPage extends StatelessWidget {
                         }
                         var answerBox = Hive.box(Constants.answerBox);
                         return GridView.builder(
+                          padding: EdgeInsets.symmetric(
+                                vertical: giveH(size: 10, mh: freeMh),
+                                horizontal: giveW(size: 15, mw: freeMw)),
                             physics: const BouncingScrollPhysics(),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -141,7 +140,6 @@ class AchievementPage extends StatelessWidget {
                             });
                       }),
                 ),
-              )
             ],
           ),
         );

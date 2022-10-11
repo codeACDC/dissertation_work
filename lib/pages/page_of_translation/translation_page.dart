@@ -47,6 +47,11 @@ class _TranslationPageState extends State<TranslationPage> {
           }
         });
 
+        if (TranslationInherited.of(context).binaryListOfImages !=
+            null) {
+          Navigator.of(context).pushReplacementNamed(MainPage.id);
+        }
+
         return WillPopScope(
           onWillPop: () => onBackButtonPressed(context),
           child: Scaffold(
