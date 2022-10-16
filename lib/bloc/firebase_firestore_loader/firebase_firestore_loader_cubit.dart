@@ -42,13 +42,17 @@ class FirebaseFirestoreCubit extends Cubit<FirebaseFirestoreState> {
         }
         var tempFireBaseBoxValues = [];
         for (int i = 0; i < fireBaseDataValues.length; i++) {
-          tempFireBaseBoxValues.add(FireBaseAnswerModel(
+          if(fireBaseDataValues.values.elementAt(i).toString().length <= 12) {
+            tempFireBaseBoxValues.add(FireBaseAnswerModel(
             kgKeyWord:
                 fireBaseDataValues.values.elementAt(i).toString().toLowerCase(),
             enKeyWord:
                 fireBaseDataValues.keys.elementAt(i).toString().toLowerCase(),
           ));
+          }
         }
+        debugPrint('Длина списка загружаемого в локальную базу данных: ${tempFireBaseBoxValues.length}');
+
         fireBaseBox.addAll(tempFireBaseBoxValues);
 
         // for(var elem in fireBaseData) {
@@ -56,7 +60,6 @@ class FirebaseFirestoreCubit extends Cubit<FirebaseFirestoreState> {
         //     fireBaseBox.add(elem);
         //   }
         // }
-
       }
       emit(const FirebaseFirestoreLoaded());
     } on SocketException catch (_) {
